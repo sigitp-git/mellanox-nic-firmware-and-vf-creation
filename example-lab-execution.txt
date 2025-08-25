@@ -534,4 +534,341 @@ sh-5.2$
 ================================================
 
 
+sh-5.2$ sudo ./update-cx7-firmware-mlxup.sh
+2025-08-25 02:11:28 - Starting ConnectX-7 firmware update using mlxup
+2025-08-25 02:11:28 - Checking MFT tools installation...
+2025-08-25 02:11:28 - mlxup not found, attempting to install...
+2025-08-25 02:11:28 - Installing mlxup tool...
+2025-08-25 02:11:28 - mlxup not found locally or in MFT installation, downloading from NVIDIA...
+2025-08-25 02:11:28 - Downloading mlxup from NVIDIA website...
+2025-08-25 02:11:28 - Detecting latest mlxup version...
+2025-08-25 02:11:28 - Verifying version 4.30.0 is available...
+2025-08-25 02:11:29 - ✅ Confirmed version 4.30.0 is available
+2025-08-25 02:11:29 - Using mlxup version: 4.30.0
+2025-08-25 02:11:29 - Primary download URL: https://www.mellanox.com/downloads/firmware/mlxup/4.30.0/SFX/linux_x64/mlxup
+2025-08-25 02:11:29 - Will try 5 different URL combinations...
+2025-08-25 02:11:29 - Trying: https://www.mellanox.com/downloads/firmware/mlxup/4.30.0/SFX/linux_x64/mlxup
+2025-08-25 02:11:34 - ✅ Downloaded mlxup from: https://www.mellanox.com/downloads/firmware/mlxup/4.30.0/SFX/linux_x64/mlxup
+2025-08-25 02:11:34 - Downloaded mlxup binary directly: mlxup-4.30.0
+2025-08-25 02:11:34 - Installing mlxup to /usr/local/bin/
+2025-08-25 02:11:34 - ✅ mlxup installed successfully: mlxup 1.0, mft 4.30.0-139, built on Oct 27 2024, 10:34:38. Git SHA Hash: N/A
+2025-08-25 02:11:34 - Temporary files cleaned up
+2025-08-25 02:11:34 - ✅ MFT tools are available
+2025-08-25 02:11:34 - Starting MST service...
+2025-08-25 02:11:35 - ✅ MST service started successfully
+2025-08-25 02:11:37 - Detecting ConnectX-7 devices...
+2025-08-25 02:11:37 - ✅ Found 4 ConnectX-7 device(s)
+2025-08-25 02:11:37 - ConnectX-7 devices:
+2025-08-25 02:11:37 -   0000:05:00.0 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+2025-08-25 02:11:37 -   0000:05:00.1 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+2025-08-25 02:11:37 -   0001:05:00.0 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+2025-08-25 02:11:37 -   0001:05:00.1 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+2025-08-25 02:11:37 - Querying available firmware updates...
 
+=== FIRMWARE UPDATE QUERY ===
+Querying Mellanox devices firmware ...
+
+Device #1:
+----------
+
+  Device Type:      ConnectX7
+  Part Number:      MCX755106AS-HEA_Ax
+  Description:      NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+  PSID:             MT_0000000834
+  PCI Device Name:  /dev/mst/mt4129_pciconf1
+  Base MAC:         5c2573a98bd4
+  Versions:         Current        Available     
+     FW             28.40.1000     28.43.1014    
+     PXE            3.7.0300       N/A           
+     UEFI           14.33.0010     N/A           
+
+  Status:           Update required
+
+Device #2:
+----------
+
+  Device Type:      ConnectX7
+  Part Number:      MCX755106AS-HEA_Ax
+  Description:      NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+  PSID:             MT_0000000834
+  PCI Device Name:  /dev/mst/mt4129_pciconf0
+  Base MAC:         5c257331e4dc
+  Versions:         Current        Available     
+     FW             28.40.1000     28.43.1014    
+     PXE            3.7.0300       N/A           
+     UEFI           14.33.0010     N/A           
+
+  Status:           Update required
+
+2025-08-25 02:12:07 - ✅ Firmware query completed successfully
+=============================
+
+2025-08-25 02:12:07 - Starting firmware update process...
+
+=== FIRMWARE UPDATE PROCESS ===
+2025-08-25 02:12:07 - Checking for firmware updates...
+Querying Mellanox devices firmware ...
+
+Device #1:
+----------
+
+  Device Type:      ConnectX7
+  Part Number:      MCX755106AS-HEA_Ax
+  Description:      NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+  PSID:             MT_0000000834
+  PCI Device Name:  /dev/mst/mt4129_pciconf1
+  Base MAC:         5c2573a98bd4
+  Versions:         Current        Available     
+     FW             28.40.1000     28.43.1014    
+     PXE            3.7.0300       N/A           
+     UEFI           14.33.0010     N/A           
+
+  Status:           Update required
+
+Device #2:
+----------
+
+  Device Type:      ConnectX7
+  Part Number:      MCX755106AS-HEA_Ax
+  Description:      NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+  PSID:             MT_0000000834
+  PCI Device Name:  /dev/mst/mt4129_pciconf0
+  Base MAC:         5c257331e4dc
+  Versions:         Current        Available     
+     FW             28.40.1000     28.43.1014    
+     PXE            3.7.0300       N/A           
+     UEFI           14.33.0010     N/A           
+
+  Status:           Update required
+
+
+⚠️  FIRMWARE UPDATE WARNING ⚠️
+About to update firmware on all ConnectX-7 devices
+This process:
+- Will automatically download and install compatible firmware
+- May require a system reboot to complete
+- Should not be interrupted once started
+
+Continue with firmware update? (yes/no): 
+
+Continue with firmware update? (yes/no): yes
+2025-08-25 02:12:57 - Executing firmware update...
+2025-08-25 02:12:57 - Command: mlxup
+Querying Mellanox devices firmware ...
+
+Device #1:
+----------
+
+  Device Type:      ConnectX7
+  Part Number:      MCX755106AS-HEA_Ax
+  Description:      NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+  PSID:             MT_0000000834
+  PCI Device Name:  /dev/mst/mt4129_pciconf1
+  Base MAC:         5c2573a98bd4
+  Versions:         Current        Available     
+     FW             28.40.1000     28.43.1014    
+     PXE            3.7.0300       N/A           
+     UEFI           14.33.0010     N/A           
+
+  Status:           Update required
+
+Device #2:
+----------
+
+  Device Type:      ConnectX7
+  Part Number:      MCX755106AS-HEA_Ax
+  Description:      NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+  PSID:             MT_0000000834
+  PCI Device Name:  /dev/mst/mt4129_pciconf0
+  Base MAC:         5c257331e4dc
+  Versions:         Current        Available     
+     FW             28.40.1000     28.43.1014    
+     PXE            3.7.0300       N/A           
+     UEFI           14.33.0010     N/A           
+
+  Status:           Update required
+
+---------
+Found 2 device(s) requiring firmware update...
+
+Perform FW update? [y/N]: y
+Device #1: Updating FW ...    
+
+FSMST_INITIALIZE -   OK          
+Writing Boot image component -   0% ... 100% (~5mins)
+
+Writing Boot image component -   OK          
+Done
+Device #2: Updating FW ...  
+
+Device #2: Updating FW ...     
+FSMST_INITIALIZE -   OK          
+Writing Boot image component -   0% ... 100% (~5mins)
+
+Device #2: Updating FW ...     
+FSMST_INITIALIZE -   OK          
+Writing Boot image component -   OK          
+Done
+
+Restart needed for updates to take effect.
+Log File: /tmp/mlxup_workdir/mlxup-20250825_021257_166516.log
+2025-08-25 02:18:23 - ✅ Firmware update completed successfully
+
+✅ Firmware Update Successful!
+
+Next steps:
+1. Reboot the system to activate new firmware:
+   sudo reboot
+
+2. After reboot, verify firmware versions:
+   sudo ./mlx-nic-health-check.sh
+
+2025-08-25 02:18:23 - Firmware update process completed successfully
+2025-08-25 02:18:23 - Script execution completed
+sh-5.2$ 
+
+=============================================
+
+
+sh-5.2$ sudo ./create-virtual-function.sh 
+2025-08-25 02:32:28 - Starting Virtual Function creation script
+2025-08-25 02:32:28 - ✅ mlxconfig found - hardware VF configuration will be performed
+2025-08-25 02:32:28 - Detecting ConnectX-7 network interfaces...
+2025-08-25 02:32:30 - Found 4 ConnectX-7 interface(s): ens1f0np0 ens1f1np1 enP1s11f0np0 enP1s11f1np1
+2025-08-25 02:32:30 - Configuring hardware VF limits using mlxconfig...
+2025-08-25 02:32:30 - Processing Mellanox device: 0000:05:00.0
+2025-08-25 02:32:33 - Current hardware VF limit for 0000:05:00.0: 127
+2025-08-25 02:32:33 - Hardware VF limit already correct for 0000:05:00.0 (127)
+2025-08-25 02:32:33 - Processing Mellanox device: 0000:05:00.1
+2025-08-25 02:32:36 - Current hardware VF limit for 0000:05:00.1: 127
+2025-08-25 02:32:36 - Hardware VF limit already correct for 0000:05:00.1 (127)
+2025-08-25 02:32:36 - Processing Mellanox device: 0000:05:01.0
+2025-08-25 02:32:36 - Current hardware VF limit for 0000:05:01.0: 
+2025-08-25 02:32:36 - Setting hardware VF limit to 127 for device 0000:05:01.0...
+2025-08-25 02:32:36 - Retrying with interactive prompt...
+2025-08-25 02:32:36 - ❌ Failed to configure hardware VF limit for 0000:05:01.0
+2025-08-25 02:32:36 -    You may need to run manually: mlxconfig -d 0000:05:01.0 set NUM_OF_VFS=127
+2025-08-25 02:32:36 - Processing Mellanox device: 0000:05:01.1
+2025-08-25 02:32:36 - Current hardware VF limit for 0000:05:01.1: 
+2025-08-25 02:32:36 - Setting hardware VF limit to 127 for device 0000:05:01.1...
+2025-08-25 02:32:36 - Retrying with interactive prompt...
+2025-08-25 02:32:36 - ❌ Failed to configure hardware VF limit for 0000:05:01.1
+2025-08-25 02:32:36 -    You may need to run manually: mlxconfig -d 0000:05:01.1 set NUM_OF_VFS=127
+2025-08-25 02:32:36 - Processing Mellanox device: 0000:05:02.0
+2025-08-25 02:32:36 - Current hardware VF limit for 0000:05:02.0: 
+2025-08-25 02:32:36 - Setting hardware VF limit to 127 for device 0000:05:02.0...
+2025-08-25 02:32:36 - Retrying with interactive prompt...
+2025-08-25 02:32:36 - ❌ Failed to configure hardware VF limit for 0000:05:02.0
+2025-08-25 02:32:36 -    You may need to run manually: mlxconfig -d 0000:05:02.0 set NUM_OF_VFS=127
+2025-08-25 02:32:36 - Processing Mellanox device: 0000:05:02.1
+2025-08-25 02:32:36 - Current hardware VF limit for 0000:05:02.1: 
+2025-08-25 02:32:36 - Setting hardware VF limit to 127 for device 0000:05:02.1...
+2025-08-25 02:32:36 - Retrying with interactive prompt...
+2025-08-25 02:32:36 - ❌ Failed to configure hardware VF limit for 0000:05:02.1
+2025-08-25 02:32:36 -    You may need to run manually: mlxconfig -d 0000:05:02.1 set NUM_OF_VFS=127
+2025-08-25 02:32:36 - Processing Mellanox device: 0000:05:03.0
+2025-08-25 02:32:36 - Current hardware VF limit for 0000:05:03.0: 
+2025-08-25 02:32:36 - Setting hardware VF limit to 127 for device 0000:05:03.0...
+2025-08-25 02:32:36 - Retrying with interactive prompt...
+2025-08-25 02:32:36 - ❌ Failed to configure hardware VF limit for 0000:05:03.0
+2025-08-25 02:32:36 -    You may need to run manually: mlxconfig -d 0000:05:03.0 set NUM_OF_VFS=127
+2025-08-25 02:32:36 - Processing Mellanox device: 0000:05:03.1
+2025-08-25 02:32:36 - Current hardware VF limit for 0000:05:03.1: 
+2025-08-25 02:32:36 - Setting hardware VF limit to 127 for device 0000:05:03.1...
+2025-08-25 02:32:36 - Retrying with interactive prompt...
+2025-08-25 02:32:36 - ❌ Failed to configure hardware VF limit for 0000:05:03.1
+2025-08-25 02:32:36 -    You may need to run manually: mlxconfig -d 0000:05:03.1 set NUM_OF_VFS=127
+2025-08-25 02:32:36 - Processing Mellanox device: 0000:05:04.0
+2025-08-25 02:32:36 - Current hardware VF limit for 0000:05:04.0: 
+2025-08-25 02:32:36 - Setting hardware VF limit to 127 for device 0000:05:04.0...
+2025-08-25 02:32:36 - Retrying with interactive prompt...
+2025-08-25 02:32:36 - ❌ Failed to configure hardware VF limit for 0000:05:04.0
+2025-08-25 02:32:36 -    You may need to run manually: mlxconfig -d 0000:05:04.0 set NUM_OF_VFS=127
+2025-08-25 02:32:36 - Processing Mellanox device: 0000:05:04.1
+2025-08-25 02:32:36 - Current hardware VF limit for 0000:05:04.1: 
+2025-08-25 02:32:36 - Setting hardware VF limit to 127 for device 0000:05:04.1...
+2025-08-25 02:32:36 - Retrying with interactive prompt...
+2025-08-25 02:32:36 - ❌ Failed to configure hardware VF limit for 0000:05:04.1
+2025-08-25 02:32:36 -    You may need to run manually: mlxconfig -d 0000:05:04.1 set NUM_OF_VFS=127
+2025-08-25 02:32:36 - Processing Mellanox device: 0001:05:00.0
+2025-08-25 02:32:39 - Current hardware VF limit for 0001:05:00.0: 127
+2025-08-25 02:32:39 - Hardware VF limit already correct for 0001:05:00.0 (127)
+2025-08-25 02:32:39 - Processing Mellanox device: 0001:05:00.1
+2025-08-25 02:32:42 - Current hardware VF limit for 0001:05:00.1: 127
+2025-08-25 02:32:42 - Hardware VF limit already correct for 0001:05:00.1 (127)
+2025-08-25 02:32:42 - Processing Mellanox device: 0001:05:01.0
+2025-08-25 02:32:42 - Current hardware VF limit for 0001:05:01.0: 
+2025-08-25 02:32:42 - Setting hardware VF limit to 127 for device 0001:05:01.0...
+2025-08-25 02:32:42 - Retrying with interactive prompt...
+2025-08-25 02:32:42 - ❌ Failed to configure hardware VF limit for 0001:05:01.0
+2025-08-25 02:32:42 -    You may need to run manually: mlxconfig -d 0001:05:01.0 set NUM_OF_VFS=127
+2025-08-25 02:32:42 - Processing Mellanox device: 0001:05:01.1
+2025-08-25 02:32:42 - Current hardware VF limit for 0001:05:01.1: 
+2025-08-25 02:32:42 - Setting hardware VF limit to 127 for device 0001:05:01.1...
+2025-08-25 02:32:42 - Retrying with interactive prompt...
+2025-08-25 02:32:42 - ❌ Failed to configure hardware VF limit for 0001:05:01.1
+2025-08-25 02:32:42 -    You may need to run manually: mlxconfig -d 0001:05:01.1 set NUM_OF_VFS=127
+2025-08-25 02:32:42 - Processing Mellanox device: 0001:05:02.0
+2025-08-25 02:32:42 - Current hardware VF limit for 0001:05:02.0: 
+2025-08-25 02:32:42 - Setting hardware VF limit to 127 for device 0001:05:02.0...
+2025-08-25 02:32:42 - Retrying with interactive prompt...
+2025-08-25 02:32:42 - ❌ Failed to configure hardware VF limit for 0001:05:02.0
+2025-08-25 02:32:42 -    You may need to run manually: mlxconfig -d 0001:05:02.0 set NUM_OF_VFS=127
+2025-08-25 02:32:42 - Processing Mellanox device: 0001:05:02.1
+2025-08-25 02:32:42 - Current hardware VF limit for 0001:05:02.1: 
+2025-08-25 02:32:42 - Setting hardware VF limit to 127 for device 0001:05:02.1...
+2025-08-25 02:32:42 - Retrying with interactive prompt...
+2025-08-25 02:32:42 - ❌ Failed to configure hardware VF limit for 0001:05:02.1
+2025-08-25 02:32:42 -    You may need to run manually: mlxconfig -d 0001:05:02.1 set NUM_OF_VFS=127
+2025-08-25 02:32:42 - Processing Mellanox device: 0001:05:03.0
+2025-08-25 02:32:42 - Current hardware VF limit for 0001:05:03.0: 
+2025-08-25 02:32:42 - Setting hardware VF limit to 127 for device 0001:05:03.0...
+2025-08-25 02:32:42 - Retrying with interactive prompt...
+2025-08-25 02:32:42 - ❌ Failed to configure hardware VF limit for 0001:05:03.0
+2025-08-25 02:32:42 -    You may need to run manually: mlxconfig -d 0001:05:03.0 set NUM_OF_VFS=127
+2025-08-25 02:32:42 - Processing Mellanox device: 0001:05:03.1
+2025-08-25 02:32:42 - Current hardware VF limit for 0001:05:03.1: 
+2025-08-25 02:32:42 - Setting hardware VF limit to 127 for device 0001:05:03.1...
+2025-08-25 02:32:43 - Retrying with interactive prompt...
+2025-08-25 02:32:43 - ❌ Failed to configure hardware VF limit for 0001:05:03.1
+2025-08-25 02:32:43 -    You may need to run manually: mlxconfig -d 0001:05:03.1 set NUM_OF_VFS=127
+2025-08-25 02:32:43 - Processing Mellanox device: 0001:05:04.0
+2025-08-25 02:32:43 - Current hardware VF limit for 0001:05:04.0: 
+2025-08-25 02:32:43 - Setting hardware VF limit to 127 for device 0001:05:04.0...
+2025-08-25 02:32:43 - Retrying with interactive prompt...
+2025-08-25 02:32:43 - ❌ Failed to configure hardware VF limit for 0001:05:04.0
+2025-08-25 02:32:43 -    You may need to run manually: mlxconfig -d 0001:05:04.0 set NUM_OF_VFS=127
+2025-08-25 02:32:43 - Processing Mellanox device: 0001:05:04.1
+2025-08-25 02:32:43 - Current hardware VF limit for 0001:05:04.1: 
+2025-08-25 02:32:43 - Setting hardware VF limit to 127 for device 0001:05:04.1...
+2025-08-25 02:32:43 - Retrying with interactive prompt...
+2025-08-25 02:32:43 - ❌ Failed to configure hardware VF limit for 0001:05:04.1
+2025-08-25 02:32:43 -    You may need to run manually: mlxconfig -d 0001:05:04.1 set NUM_OF_VFS=127
+2025-08-25 02:32:43 - Processing interface: ens1f0np0
+2025-08-25 02:32:43 - Current VFs for ens1f0np0: 16
+2025-08-25 02:32:43 - Maximum supported VFs for ens1f0np0: 16
+2025-08-25 02:32:43 - Attempting to create 127 Virtual Functions for interface: ens1f0np0
+2025-08-25 02:32:43 - Current VFs: 16, Hardware maximum: 16
+2025-08-25 02:32:43 - Step 1: Resetting VFs to 0 for ens1f0np0...
+2025-08-25 02:33:30 - ✅ Successfully reset VFs to 0 for ens1f0np0
+2025-08-25 02:33:33 - Verified reset: ens1f0np0 now has 0 VFs
+2025-08-25 02:33:33 - Step 2: Setting VFs to 127 for ens1f0np0...
+2025-08-25 02:33:33 - ❌ Failed to set VFs to 127 for ens1f0np0
+2025-08-25 02:33:33 -    This may indicate the hardware limit hasn't been applied yet (reboot required)
+2025-08-25 02:33:33 - Processing interface: ens1f1np1
+2025-08-25 02:33:33 - Current VFs for ens1f1np1: 16
+2025-08-25 02:33:33 - Maximum supported VFs for ens1f1np1: 16
+2025-08-25 02:33:33 - Attempting to create 127 Virtual Functions for interface: ens1f1np1
+2025-08-25 02:33:33 - Current VFs: 16, Hardware maximum: 16
+2025-08-25 02:33:33 - Step 1: Resetting VFs to 0 for ens1f1np1...
+2025-08-25 02:34:21 - ✅ Successfully reset VFs to 0 for ens1f1np1
+2025-08-25 02:34:24 - Verified reset: ens1f1np1 now has 0 VFs
+2025-08-25 02:34:24 - Step 2: Setting VFs to 127 for ens1f1np1...
+2025-08-25 02:34:24 - ❌ Failed to set VFs to 127 for ens1f1np1
+2025-08-25 02:34:24 -    This may indicate the hardware limit hasn't been applied yet (reboot required)
+2025-08-25 02:34:24 - Processing interface: enP1s11f0np0
+2025-08-25 02:34:24 - Current VFs for enP1s11f0np0: 16
+2025-08-25 02:34:24 - Maximum supported VFs for enP1s11f0np0: 16
+2025-08-25 02:34:24 - Attempting to create 127 Virtual Functions for interface: enP1s11f0np0
+2025-08-25 02:34:24 - Current VFs: 16, Hardware maximum: 16
+2025-08-25 02:34:24 - Step 1: Resetting VFs to 0 for enP1s11f0np0...
