@@ -125,8 +125,26 @@ The following table shows the mapping between PSID (Parameter-Set IDentification
    sudo ./update-cx7-firmware.sh              # Auto-detect mode
    sudo ./update-cx7-firmware.sh --no-auto-detect  # Static config mode
    ```
+   **⚠️ IMPORTANT ⚠️**
+   **Remove your EC2 instance from the Auto Scaling Group before rebooting, otherwise due to time constraint, the instance will terminate before finished rebooting**
+   ```
+   aws autoscaling detach-instances \
+    --instance-ids i-1234567890abcdef0 \
+    --auto-scaling-group-name my-asg \
+    --should-decrement-desired-capacity
+  ```
 
-5. **Configure VFs**: Set up Virtual Functions as needed
+  **after reboot complete, add it back:**
+  ```
+  aws autoscaling attach-instances \
+    --instance-ids i-1234567890abcdef0 \
+    --auto-scaling-group-name my-asg
+
+  aws autoscaling describe-auto-scaling-instances \
+    --instance-ids i-1234567890abcdef0
+  ```
+
+5. **Configure VFs**: Set up Virtual Functions as needed, once the instance finished rebooting
    ```bash
    sudo ./create-virtual-function.sh           # Configure hardware VF limits and create VFs
    # Note: Reboot may be required if hardware VF limits are changed
