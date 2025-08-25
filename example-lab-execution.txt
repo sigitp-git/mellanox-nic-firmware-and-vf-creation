@@ -2,7 +2,14 @@ $ aws ssm start-session --t i-123456789
 
 Starting session with SessionId: i-123456789-pzi94nd4njxn766p8fhv2lur5a
 sh-5.2$ cd
-sh-5.2$ sudo yum install git -y 
+sh-5.2$ sudo yum install git -y
+sh-5.2$ pwd
+/home/ssm-user
+
+sh-5.2$ git clone https://github.com/sigitp-git/mellanox-nic-firmware-and-vf-creation
+sh-5.2$ cd mellanox-nic-firmware-and-vf-creation/
+sh-5.2$ pwd
+/home/ssm-user/mellanox-nic-firmware-and-vf-creation
 
 sh-5.2$ sudo ./quick-test.sh
 🚀 Quick Test - Mellanox ConnectX-7 Scripts
