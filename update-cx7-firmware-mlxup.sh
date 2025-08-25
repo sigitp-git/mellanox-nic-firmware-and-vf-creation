@@ -105,7 +105,23 @@ check_mft_tools() {
 install_mlxup() {
     log "Installing mlxup tool..."
     
-    # mlxup is typically included with MFT, but may need separate installation
+    # First check if mlxup binary exists in current directory
+    if [ -f "./mlxup" ]; then
+        log "✅ mlxup binary found in current directory"
+        log "Installing mlxup to /usr/local/bin/"
+        cp "./mlxup" /usr/local/bin/mlxup
+        chmod +x /usr/local/bin/mlxup
+        
+        # Verify installation
+        if command -v mlxup >/dev/null 2>&1; then
+            local installed_version=$(mlxup --version 2>/dev/null | head -1 || echo "unknown")
+            log "✅ mlxup installed successfully: $installed_version"
+            return 0
+        else
+            log "⚠️  mlxup installation verification failed, trying other methods..."
+        fi
+    fi
+    
     # Check if it's available in the MFT installation
     local mft_path=$(which mst 2>/dev/null | xargs dirname 2>/dev/null)
     
@@ -115,12 +131,206 @@ install_mlxup() {
         if ! command -v mlxup >/dev/null 2>&1; then
             ln -sf "$mft_path/mlxup" /usr/local/bin/mlxup
         fi
-    else
-        log "⚠️  mlxup not found in MFT installation"
-        log "Please ensure you have the latest MFT version that includes mlxup"
-        log "Visit: $MLXUP_URL"
-        error_exit "mlxup tool not available"
+        return 0
     fi
+    
+    # If not found locally or in MFT, download from NVIDIA website
+    log "mlxup not found locally or in MFT installation, downloading from NVIDIA..."
+    download_mlxup_from_nvidia
+}
+
+# Download mlxup from NVIDIA website
+download_mlxup_from_nvidia() {
+    log "Downloading mlxup from NVIDIA website..."
+    
+    # Install curl if not available
+    if ! command -v curl >/dev/null 2>&1; then
+        log "Installing curl for mlxup download..."
+        yum install -y curl || apt-get install -y curl
+    fi
+    
+    # Create temporary directory
+    local temp_dir=$(mktemp -d)
+    cd "$temp_dir"
+    
+    # Step 1: Determine mlxup version to download
+    log "Detecting latest mlxup version..."
+    
+    # Try multiple methods to detect the version
+    local latest_version=""
+    
+    # Method 1: Parse the mlxup page
+    local page_content=$(curl -s --connect-timeout 15 "$MLXUP_URL" 2>/dev/null || echo "")
+    
+    if [ -n "$page_content" ]; then
+        # Look for mlxup-specific version patterns, prioritizing 4.30.x versions
+        local versions=($(echo "$page_content" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | grep -E '^4\.(3[0-9]|[4-9][0-9])\.' | sort -V -u -r))
+        
+        # If no 4.30+ versions found, look for any 4.x versions
+        if [ ${#versions[@]} -eq 0 ]; then
+            versions=($(echo "$page_content" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | grep -E '^4\.' | sort -V -u -r))
+        fi
+        
+        if [ ${#versions[@]} -gt 0 ]; then
+            latest_version="${versions[0]}"
+        fi
+    fi
+    
+    # Method 2: Use known recent versions as fallback
+    if [ -z "$latest_version" ]; then
+        log "⚠️  Could not auto-detect version from web, using known current version..."
+        # Start with the current known working version
+        latest_version="4.30.0"
+        
+        # Verify this version exists
+        local test_url="https://www.mellanox.com/downloads/firmware/mlxup/${latest_version}/SFX/linux_x64/mlxup"
+        log "Verifying version $latest_version is available..."
+        if curl -I --connect-timeout 5 --max-time 10 -f "$test_url" >/dev/null 2>&1; then
+            log "✅ Confirmed version $latest_version is available"
+        else
+            log "⚠️  Could not verify version $latest_version, but will attempt download anyway"
+        fi
+    fi
+    
+    log "Using mlxup version: $latest_version"
+    
+    # Step 2: Construct download URLs for Linux x64
+    # Use the correct NVIDIA mlxup download URL pattern
+    local download_urls=(
+        "https://www.mellanox.com/downloads/firmware/mlxup/${latest_version}/SFX/linux_x64/mlxup"
+        "https://content.mellanox.com/firmware/mlxup/${latest_version}/SFX/linux_x64/mlxup"
+        "https://network.nvidia.com/downloads/firmware/mlxup/${latest_version}/SFX/linux_x64/mlxup"
+    )
+    
+    # Also try some fallback patterns in case the structure changes
+    local fallback_urls=(
+        "https://www.mellanox.com/downloads/MFT/mlxup-${latest_version}-linux-x64.tar.gz"
+        "https://content.mellanox.com/MFT/mlxup-${latest_version}-linux-x64.tar.gz"
+    )
+    
+    # Combine primary and fallback URLs
+    download_urls+=("${fallback_urls[@]}")
+    
+    local primary_url="${download_urls[0]}"
+    log "Primary download URL: $primary_url"
+    log "Will try ${#download_urls[@]} different URL combinations..."
+    
+    # Try all URLs until one works
+    local downloaded=false
+    local download_file=""
+    local is_binary=false
+    
+    for url in "${download_urls[@]}"; do
+        log "Trying: $url"
+        local filename=$(basename "$url")
+        
+        # Check if this is a direct binary download or archive
+        if [[ "$filename" == "mlxup" ]]; then
+            is_binary=true
+            filename="mlxup-${latest_version}"
+        else
+            is_binary=false
+        fi
+        
+        # Use curl with better error handling and timeout
+        if curl -L --connect-timeout 10 --max-time 60 -f -o "$filename" "$url" 2>/dev/null; then
+            log "✅ Downloaded mlxup from: $url"
+            download_file="$filename"
+            downloaded=true
+            break
+        fi
+        
+        # Clean up failed download attempt
+        [ -f "$filename" ] && rm -f "$filename"
+    done
+    
+    if [ "$downloaded" = false ]; then
+        log "❌ All download attempts failed"
+        log "Trying fallback: checking for mlxup in MFT package repositories..."
+        
+        # Last resort: try to find mlxup in system package repositories
+        if command -v yum >/dev/null 2>&1; then
+            if yum search mlxup 2>/dev/null | grep -q mlxup; then
+                log "Found mlxup in yum repositories, attempting installation..."
+                if yum install -y mlxup 2>/dev/null; then
+                    log "✅ mlxup installed via yum"
+                    cd - >/dev/null
+                    rm -rf "$temp_dir"
+                    return 0
+                fi
+            fi
+        elif command -v apt-get >/dev/null 2>&1; then
+            if apt-cache search mlxup 2>/dev/null | grep -q mlxup; then
+                log "Found mlxup in apt repositories, attempting installation..."
+                if apt-get install -y mlxup 2>/dev/null; then
+                    log "✅ mlxup installed via apt"
+                    cd - >/dev/null
+                    rm -rf "$temp_dir"
+                    return 0
+                fi
+            fi
+        fi
+        
+        log ""
+        log "Manual download instructions:"
+        log "1. Visit: $MLXUP_URL"
+        log "2. Look for mlxup version $latest_version"
+        log "3. Download the Linux x64 package"
+        log "4. Extract and copy mlxup binary to /usr/local/bin/"
+        log ""
+        error_exit "Failed to download mlxup automatically"
+    fi
+    
+    # Step 3: Extract and install mlxup
+    if [ -z "$download_file" ]; then
+        error_exit "No download file specified"
+    fi
+    
+    if [ ! -f "$download_file" ]; then
+        error_exit "Downloaded mlxup file not found: $download_file"
+    fi
+    
+    local mlxup_binary=""
+    
+    if [ "$is_binary" = "true" ]; then
+        # Direct binary download
+        log "Downloaded mlxup binary directly: $download_file"
+        mlxup_binary="$download_file"
+        chmod +x "$mlxup_binary"
+    else
+        # Archive download - extract it
+        log "Extracting mlxup archive: $download_file"
+        if tar -xzf "$download_file"; then
+            log "✅ mlxup archive extracted successfully"
+        else
+            error_exit "Failed to extract mlxup archive"
+        fi
+        
+        # Find the mlxup binary
+        mlxup_binary=$(find . -name "mlxup" -type f -executable | head -1)
+        
+        if [ -z "$mlxup_binary" ]; then
+            error_exit "mlxup binary not found in extracted archive"
+        fi
+    fi
+    
+    # Install mlxup to system location
+    log "Installing mlxup to /usr/local/bin/"
+    cp "$mlxup_binary" /usr/local/bin/mlxup
+    chmod +x /usr/local/bin/mlxup
+    
+    # Verify installation
+    if command -v mlxup >/dev/null 2>&1; then
+        local installed_version=$(mlxup --version 2>/dev/null | head -1 || echo "unknown")
+        log "✅ mlxup installed successfully: $installed_version"
+    else
+        error_exit "mlxup installation verification failed"
+    fi
+    
+    # Cleanup
+    cd /
+    rm -rf "$temp_dir"
+    log "Temporary files cleaned up"
 }
 
 # Start MST service

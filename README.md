@@ -116,6 +116,12 @@ The following table shows the mapping between PSID (Parameter-Set IDentification
 
 4. **Firmware Update**: Auto-detect and install latest firmware
    ```bash
+   # Using mlxup (NVIDIA's official firmware update tool) - RECOMMENDED
+   sudo ./update-cx7-firmware-mlxup.sh        # Check and install firmware updates
+   sudo ./update-cx7-firmware-mlxup.sh --query # Only check for available updates
+   sudo ./update-cx7-firmware-mlxup.sh --force # Force update even if same version
+   
+   # Alternative: Custom firmware scripts
    sudo ./update-cx7-firmware.sh              # Auto-detect mode
    sudo ./update-cx7-firmware.sh --no-auto-detect  # Static config mode
    ```
