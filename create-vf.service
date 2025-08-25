@@ -1,0 +1,26 @@
+[Unit]
+Description=Mellanox ConnectX-7 Virtual Function Creation Service
+Documentation=file:///README.md
+After=network.target iptables.service NetworkManager.service libvirtd.service
+Wants=network.target
+Before=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/create-virtual-function.sh
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+TimeoutStartSec=300
+User=root
+Group=root
+
+# Restart policy
+Restart=on-failure
+RestartSec=10
+
+# Environment
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=multi-user.target

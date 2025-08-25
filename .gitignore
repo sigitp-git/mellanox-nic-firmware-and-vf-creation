@@ -1,0 +1,64 @@
+# Logs
+*.log
+logs/
+*.out
+
+# Temporary files
+*.tmp
+*.temp
+*~
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# Runtime files
+*.pid
+*.lock
+
+# Configuration overrides (keep templates, ignore local configs)
+*local.json
+*local.conf
+*.local
+.env
+.env.local
+
+# Build artifacts
+dist/
+build/
+target/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Firmware files (if downloaded/cached)
+*.bin
+*.fw
+*.img
+firmware-cache/
+downloads/
+
+# Test results
+test-results/
+*.test.log
+coverage/
+
+# System specific
+/var/
+/tmp/

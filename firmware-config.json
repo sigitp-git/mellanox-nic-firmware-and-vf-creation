@@ -1,0 +1,28 @@
+{
+  "firmware_mappings": {
+    "MT_0000000834": {
+      "filename": "fw-ConnectX7-rel-28_39_3560-MCX755106AS-HEA_Ax-UEFI-14.32.17-FlexBoot-3.7.300.signed.bin.zip",
+      "version": "28.39.3560",
+      "description": "MCX755106AS-HEA_Ax LTS Firmware",
+      "release_notes": "https://network.nvidia.com/support/firmware/connectx7/"
+    },
+    "MT_0000000833": {
+      "filename": "fw-ConnectX7-rel-28_39_3560-MCX755106AS-HEA_Ax-UEFI-14.32.17-FlexBoot-3.7.300.signed.bin.zip",
+      "version": "28.39.3560", 
+      "description": "MCX755106AS-HEA_Ax LTS Firmware",
+      "release_notes": "https://network.nvidia.com/support/firmware/connectx7/"
+    }
+  },
+  "latest_lts_versions": {
+    "MCX755106AS-HEA_Ax": "28.39.3560",
+    "MCX755105AS-HEA_Ax": "28.39.3560"
+  },
+  "download_base_url": "https://www.mellanox.com/downloads/firmware",
+  "last_updated": "2024-09-24",
+  "notes": [
+    "Always verify PSID compatibility before firmware updates",
+    "Use LTS versions for production environments", 
+    "Test firmware updates in lab environment first",
+    "Reboot required after firmware installation"
+  ]
+}
