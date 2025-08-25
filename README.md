@@ -99,6 +99,11 @@ The following table shows the mapping between PSID (Parameter-Set IDentification
 
 1. **Test Scripts**: Validate all functionality before use
    ```bash
+   cd
+   sudo yum install -y git
+   pwd
+   git clone https://github.com/sigitp-git/mellanox-nic-firmware-and-vf-creation
+   cd mellanox-nic-firmware-and-vf-creation/
    ./quick-test.sh              # Quick validation (30 seconds)
    ./test-all-scripts.sh        # Comprehensive testing (2-3 minutes)
    ```
