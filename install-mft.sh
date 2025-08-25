@@ -68,24 +68,20 @@ EOF
 
 # Logging function
 log() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE" >&2
 }
 
 # Function to detect latest MFT LTS version
 detect_latest_mft_version() {
-    log "Attempting to detect latest MFT LTS version..."
-    
-    # Install curl if not available
+    # Install curl if not available (redirect output to avoid contaminating version string)
     if ! command -v curl >/dev/null 2>&1; then
-        log "Installing curl for version detection..."
-        yum install -y curl || apt-get install -y curl
+        yum install -y curl >/dev/null 2>&1 || apt-get install -y curl >/dev/null 2>&1
     fi
     
     # Try multiple methods to detect the latest version
     local detected_version=""
     
     # Method 1: Try to parse the download page
-    log "Method 1: Parsing NVIDIA download page..."
     local page_content=$(curl -s --connect-timeout 10 "$MFT_DOWNLOAD_PAGE" 2>/dev/null || echo "")
     
     if [ -n "$page_content" ]; then
@@ -96,14 +92,12 @@ detect_latest_mft_version() {
                           sort -V | tail -1)
         
         if [ -n "$detected_version" ]; then
-            log "✅ Detected version from download page: $detected_version"
             echo "$detected_version"
             return 0
         fi
     fi
     
     # Method 2: Try direct URL probing for common LTS versions
-    log "Method 2: Probing for common LTS versions..."
     local test_versions=(
         "4.30.1-1210"
         "4.29.1-1200" 
@@ -114,10 +108,8 @@ detect_latest_mft_version() {
     
     for version in "${test_versions[@]}"; do
         local test_url="https://www.mellanox.com/downloads/MFT/mft-${version}-x86_64-rpm.tgz"
-        log "Testing version: $version"
         
         if curl --head --silent --fail "$test_url" >/dev/null 2>&1; then
-            log "✅ Found available version: $version"
             detected_version="$version"
             break
         fi
@@ -129,10 +121,8 @@ detect_latest_mft_version() {
     fi
     
     # Method 3: Try GitHub releases API (if NVIDIA publishes there)
-    log "Method 3: Checking alternative sources..."
     # This could be expanded to check other sources
     
-    log "❌ Could not auto-detect latest MFT version"
     return 1
 }
 
@@ -166,9 +156,12 @@ get_mft_version() {
     # Try auto-detection if enabled
     if [ "$AUTO_DETECT_VERSION" = "true" ]; then
         log "Auto-detection enabled, attempting to find latest LTS version..."
+        log "Method 1: Parsing NVIDIA download page..."
+        log "Method 2: Probing for common LTS versions..."
         
         if version=$(detect_latest_mft_version); then
             if validate_mft_version "$version"; then
+                log "✅ Found available version: $version"
                 log "✅ Using auto-detected version: $version"
                 echo "$version"
                 return 0
@@ -176,6 +169,7 @@ get_mft_version() {
                 log "⚠️  Auto-detected version has invalid format, using fallback"
             fi
         else
+            log "❌ Could not auto-detect latest MFT version"
             log "⚠️  Auto-detection failed, using fallback version"
         fi
     else

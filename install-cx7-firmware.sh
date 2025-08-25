@@ -17,8 +17,8 @@ AUTO_DETECT_FIRMWARE=${AUTO_DETECT_FIRMWARE:-true}  # Set to false to use static
 
 # Fallback PSID to firmware mappings for ConnectX-7 (used when auto-detection fails)
 declare -A FIRMWARE_MAP_FALLBACK=(
-    ["MT_0000000834"]="fw-ConnectX7-rel-28_39_3560-MCX755106AS-HEA_Ax-UEFI-14.32.17-FlexBoot-3.7.300.signed.bin.zip"
-    ["MT_0000000833"]="fw-ConnectX7-rel-28_39_3560-MCX755106AS-HEA_Ax-UEFI-14.32.17-FlexBoot-3.7.300.signed.bin.zip"
+    ["MT_0000000834"]="fw-ConnectX7-rel-28_43_3608-MCX755106AS-HEA_Ax-UEFI-14.37.50-FlexBoot-3.7.500.signed.bin.zip"
+    ["MT_0000000833"]="fw-ConnectX7-rel-28_43_3608-MCX755106AS-HEA_Ax-UEFI-14.37.50-FlexBoot-3.7.500.signed.bin.zip"
     # Add more PSID mappings as needed
 )
 
@@ -26,11 +26,17 @@ declare -A FIRMWARE_MAP_FALLBACK=(
 declare -A FIRMWARE_MAP
 
 # Parse command line arguments
+FORCE_FIRMWARE=false
+
 parse_arguments() {
     while [[ $# -gt 0 ]]; do
         case $1 in
             --no-auto-detect)
                 AUTO_DETECT_FIRMWARE=false
+                shift
+                ;;
+            --force)
+                FORCE_FIRMWARE=true
                 shift
                 ;;
             --help|-h)
@@ -55,11 +61,13 @@ Usage: sudo $0 [OPTIONS]
 
 OPTIONS:
     --no-auto-detect     Use static firmware mappings instead of auto-detecting latest
+    --force              Force firmware installation, bypass compatibility checks (use with caution)
     --help, -h           Show this help message
 
 Examples:
     sudo $0                    # Auto-detect and install latest LTS firmware
     sudo $0 --no-auto-detect  # Use static firmware mappings
+    sudo $0 --force           # Force firmware installation (allows downgrades)
 
 Environment Variables:
     AUTO_DETECT_FIRMWARE=false # Disable auto-detection (same as --no-auto-detect)
@@ -71,7 +79,7 @@ EOF
 
 # Logging function
 log() {
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE" >&2
 }
 
 # Error handling
@@ -96,53 +104,86 @@ detect_latest_firmware_versions() {
     
     local detected_count=0
     
-    # Method 1: Parse the ConnectX-7 firmware page
-    log "Method 1: Parsing NVIDIA ConnectX-7 firmware page..."
+    # Method 1: Parse the ConnectX-7 firmware page for latest LTS version
+    log "Method 1: Parsing NVIDIA ConnectX-7 firmware page for latest LTS version..."
     local page_content=$(curl -s --connect-timeout 15 "$FIRMWARE_PAGE_URL" 2>/dev/null || echo "")
     
     if [ -n "$page_content" ]; then
-        # Look for firmware download links and extract version information
-        # Pattern: fw-ConnectX7-rel-VERSION-MODEL-UEFI-X.Y.Z-FlexBoot-A.B.C.signed.bin.zip
+        # Step 1: Find the topmost version with -LTS indication
+        log "Looking for latest LTS version..."
+        local lts_versions=($(echo "$page_content" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+[^"]*-LTS' | sort -V -r))
         
-        # Extract firmware files for different models
-        local firmware_files=($(echo "$page_content" | grep -oE 'fw-ConnectX7-rel-[^"]*\.signed\.bin\.zip' | sort -u))
-        
-        for firmware_file in "${firmware_files[@]}"; do
-            # Extract model information from filename
-            # Example: fw-ConnectX7-rel-28_39_3560-MCX755106AS-HEA_Ax-UEFI-14.32.17-FlexBoot-3.7.300.signed.bin.zip
-            if [[ "$firmware_file" =~ fw-ConnectX7-rel-[0-9_]+-([^-]+)-.*\.signed\.bin\.zip ]]; then
-                local model="${BASH_REMATCH[1]}"
+        if [ ${#lts_versions[@]} -gt 0 ]; then
+            local latest_lts="${lts_versions[0]}"
+            log "Found latest LTS version: $latest_lts"
+            
+            # Step 2: Look for OPN: MCX755106AS-HEA with PSID: MT_0000000834
+            # Parse the page structure to find firmware downloads for this specific combination
+            
+            # Look for firmware download patterns that match our requirements
+            # Pattern: fw-ConnectX7-rel-VERSION-MCX755106AS-HEA_Ax-UEFI-X.Y.Z-FlexBoot-A.B.C.signed.bin.zip
+            local firmware_pattern="fw-ConnectX7-rel-[0-9_]+-MCX755106AS-HEA_Ax-UEFI-[0-9]+\.[0-9]+\.[0-9]+-FlexBoot-[0-9]+\.[0-9]+\.[0-9]+\.signed\.bin\.zip"
+            local firmware_files=($(echo "$page_content" | grep -oE "$firmware_pattern" | sort -V -r))
+            
+            if [ ${#firmware_files[@]} -gt 0 ]; then
+                # Use the first (latest) firmware file found
+                local latest_firmware="${firmware_files[0]}"
+                log "✅ Found latest LTS firmware for MCX755106AS-HEA: $latest_firmware"
                 
-                # Map common models to PSIDs (this mapping may need updates)
-                case "$model" in
-                    "MCX755106AS")
-                        FIRMWARE_MAP["MT_0000000834"]="$firmware_file"
-                        FIRMWARE_MAP["MT_0000000833"]="$firmware_file"
-                        ((detected_count++))
-                        log "✅ Detected firmware for MCX755106AS: $firmware_file"
-                        ;;
-                    "MCX755105AS")
-                        FIRMWARE_MAP["MT_0000000835"]="$firmware_file"
-                        ((detected_count++))
-                        log "✅ Detected firmware for MCX755105AS: $firmware_file"
-                        ;;
-                    *)
-                        log "ℹ️  Found firmware for unknown model: $model -> $firmware_file"
-                        ;;
-                esac
+                # Map to PSIDs
+                FIRMWARE_MAP["MT_0000000834"]="$latest_firmware"
+                FIRMWARE_MAP["MT_0000000833"]="$latest_firmware"
+                ((detected_count++))
+            else
+                log "⚠️  No firmware found for MCX755106AS-HEA_Ax pattern"
             fi
-        done
+        else
+            log "⚠️  No LTS versions found on firmware page"
+        fi
+        
+        # Fallback: Look for any ConnectX-7 firmware files if LTS detection failed
+        if [ $detected_count -eq 0 ]; then
+            log "Fallback: Looking for any ConnectX-7 firmware files..."
+            local firmware_files=($(echo "$page_content" | grep -oE 'fw-ConnectX7-rel-[^"]*MCX755106AS-HEA_Ax[^"]*\.signed\.bin\.zip' | sort -V -r))
+            
+            if [ ${#firmware_files[@]} -gt 0 ]; then
+                local latest_firmware="${firmware_files[0]}"
+                log "✅ Found firmware (fallback): $latest_firmware"
+                FIRMWARE_MAP["MT_0000000834"]="$latest_firmware"
+                FIRMWARE_MAP["MT_0000000833"]="$latest_firmware"
+                ((detected_count++))
+            fi
+        fi
     fi
     
-    # Method 2: Try to probe for common firmware versions
+    # Method 2: Intelligent probing for latest firmware versions
     if [ $detected_count -eq 0 ]; then
-        log "Method 2: Probing for common firmware versions..."
+        log "Method 2: Intelligent probing for latest firmware versions..."
         
+        # Define version-specific UEFI/FlexBoot mappings
+        declare -A version_uefi_map=(
+            ["28_43_3608"]="14.37.50"
+            ["28_42_1000"]="14.35.20"
+            ["28_41_1000"]="14.33.17"
+            ["28_40_1000"]="14.32.17"
+            ["28_39_3560"]="14.32.17"
+        )
+        
+        declare -A version_flexboot_map=(
+            ["28_43_3608"]="3.7.500"
+            ["28_42_1000"]="3.7.400"
+            ["28_41_1000"]="3.7.300"
+            ["28_40_1000"]="3.7.300"
+            ["28_39_3560"]="3.7.300"
+        )
+        
+        # Test versions in order of preference (newest first)
         local test_versions=(
-            "28_39_3560"
-            "28_40_1000" 
-            "28_41_1000"
+            "28_43_3608"
             "28_42_1000"
+            "28_41_1000"
+            "28_40_1000" 
+            "28_39_3560"
         )
         
         local test_models=(
@@ -152,9 +193,14 @@ detect_latest_firmware_versions() {
         
         for version in "${test_versions[@]}"; do
             for model in "${test_models[@]}"; do
-                local test_firmware="fw-ConnectX7-rel-${version}-${model}-UEFI-14.32.17-FlexBoot-3.7.300.signed.bin.zip"
+                # Get version-specific UEFI/FlexBoot versions
+                local uefi_version="${version_uefi_map[$version]:-14.32.17}"
+                local flexboot_version="${version_flexboot_map[$version]:-3.7.300}"
+                
+                local test_firmware="fw-ConnectX7-rel-${version}-${model}-UEFI-${uefi_version}-FlexBoot-${flexboot_version}.signed.bin.zip"
                 local test_url="${FIRMWARE_BASE_URL}/${test_firmware}"
                 
+                log "Testing: $test_firmware"
                 if curl --head --silent --fail "$test_url" >/dev/null 2>&1; then
                     log "✅ Found available firmware: $test_firmware"
                     
@@ -169,7 +215,7 @@ detect_latest_firmware_versions() {
                             ;;
                     esac
                     ((detected_count++))
-                    break 2  # Found one, move to next model
+                    break 2  # Found the latest available version, stop searching
                 fi
             done
         done
@@ -336,7 +382,7 @@ download_firmware() {
     
     # Extract firmware
     log "Extracting firmware..."
-    if unzip "$firmware_file"; then
+    if unzip "$firmware_file" >/dev/null; then
         log "✅ Firmware extracted successfully"
     else
         error_exit "Failed to extract firmware file"
@@ -349,7 +395,15 @@ download_firmware() {
     fi
     
     log "Found firmware binary: $BIN_FILE"
-    echo "$TEMP_DIR/$BIN_FILE"
+    
+    # Create a symlink with shorter name to avoid "File name too long" error
+    local short_name="cx7_fw_${psid}.bin"
+    ln -sf "$BIN_FILE" "$short_name"
+    
+    # Use absolute path of the short symlink (don't resolve the target)
+    local abs_bin_file="$TEMP_DIR/$short_name"
+    log "Created short symlink: $abs_bin_file"
+    echo "$abs_bin_file"
 }
 
 # Verify firmware compatibility
@@ -358,14 +412,33 @@ verify_firmware_compatibility() {
     local firmware_file="$2"
     
     log "Verifying firmware compatibility for device $device..."
+    log "Using firmware file: $firmware_file"
+    
+    # Check if file exists and is readable
+    if [ ! -f "$firmware_file" ]; then
+        log "❌ Firmware file does not exist: $firmware_file"
+        return 1
+    fi
     
     # Use flint to verify without burning
-    if flint -d "$device" -i "$firmware_file" verify 2>/dev/null; then
+    local verify_cmd="flint -d \"$device\" -i \"$firmware_file\" verify"
+    if [ "$FORCE_FIRMWARE" = "true" ]; then
+        verify_cmd="$verify_cmd --allow_psid_change --allow_rom_change"
+        log "⚠️  Force mode enabled - bypassing some compatibility checks"
+    fi
+    
+    if eval $verify_cmd 2>&1; then
         log "✅ Firmware compatibility verified for device $device"
         return 0
     else
-        log "❌ Firmware compatibility check failed for device $device"
-        return 1
+        if [ "$FORCE_FIRMWARE" = "true" ]; then
+            log "⚠️  Compatibility check failed but force mode enabled - proceeding anyway"
+            return 0
+        else
+            log "❌ Firmware compatibility check failed for device $device"
+            log "💡 Try using --force to bypass compatibility checks (use with caution)"
+            return 1
+        fi
     fi
 }
 

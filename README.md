@@ -75,6 +75,19 @@ mst start
 - **Firmware component:** It is an integral part of the firmware image stored on the device's non-volatile memory (NVMEM)
 - **Configuration identifier:** Each PSID corresponds to a specific firmware configuration and feature set
 
+### PSID to OPN Mapping:
+
+Source: https://docs.nvidia.com/networking/display/connectx7firmwarev28352000lts/firmware+compatible+products
+
+The following table shows the mapping between PSID (Parameter-Set IDentification) and OPN (Ordering Part Number) for ConnectX-7 devices:
+
+| PSID | OPN | Description |
+|------|-----|-------------|
+| MT_0000000834 | MCX755106AS-HEA | ConnectX-7 Dual-Port 200GbE QSFP112 Adapter Card |
+| MT_0000000833 | MCX755106AS-HEA | ConnectX-7 Dual-Port 200GbE QSFP112 Adapter Card (Alternative PSID) |
+
+**Note:** The PSID is used by firmware management tools to identify the correct firmware version and configuration for your specific hardware model. Always verify your device's PSID before firmware updates using `flint -d <device> query`.
+
 ## Prerequisites
 
 - AWS EC2 instance with ConnectX-7 NICs
@@ -333,30 +346,53 @@ Temperature:       65°C
 - **VERIFY PSID COMPATIBILITY** with your exact hardware model
 
 ### Download Latest LTS Firmware
+As of 8/24/2025
 
 Always use the latest LTS firmware version from NVIDIA:
 
 ```bash
 # Check https://network.nvidia.com/support/firmware/connectx7/ for latest LTS version
-# Example for MCX755106AS-HEA_Ax PSID:
-wget https://www.mellanox.com/downloads/firmware/fw-ConnectX7-rel-28_45_1200-MCX755106AS-HEA_Ax-UEFI-14.32.17-FlexBoot-3.7.300.signed.bin.zip
+
+# For firmware version 28.43.3608 (MCX755106AS-HEA_Ax PSID):
+# The right download for 28.43.3608 is:
+wget https://www.mellanox.com/downloads/firmware/fw-ConnectX7-rel-28_43_3608-MCX755106AS-HEA_Ax-UEFI-14.37.50-FlexBoot-3.7.500.signed.bin.zip
+
+# Example for other versions:
+# wget https://www.mellanox.com/downloads/firmware/fw-ConnectX7-rel-28_45_1200-MCX755106AS-HEA_Ax-UEFI-14.32.17-FlexBoot-3.7.300.signed.bin.zip
 
 unzip fw-ConnectX7-rel-*.zip
 ```
 
 ### Automated Firmware Installation
 
-**Recommended Method:** Use the automated firmware installation scripts for safer, more reliable updates:
+**🆕 Recommended Method:** Use NVIDIA's official `mlxup` tool for the safest and most reliable firmware updates:
 
 ```bash
-# Simple automated firmware update (recommended)
+# Using mlxup (NVIDIA's official firmware update tool) - RECOMMENDED
+sudo ./update-cx7-firmware-mlxup.sh        # Check and install firmware updates
+sudo ./update-cx7-firmware-mlxup.sh --query # Only check for available updates
+sudo ./update-cx7-firmware-mlxup.sh --force # Force update even if same version
+```
+
+**Alternative Methods:** Custom firmware installation scripts:
+
+```bash
+# Custom automated firmware update
 sudo ./update-cx7-firmware.sh
 
 # Direct method with full automation
 sudo ./install-cx7-firmware.sh
 ```
 
-**Features of Automated Installation:**
+**Features of mlxup (Recommended):**
+- **Official NVIDIA Tool:** Uses NVIDIA's official firmware update utility
+- **Automatic Compatibility:** Handles dependency resolution and compatibility checks automatically
+- **Safe Updates:** Built-in validation and rollback procedures
+- **Latest Firmware:** Always downloads the most appropriate firmware version
+- **Comprehensive Support:** Supports all ConnectX series devices
+- **Production Ready:** Designed for enterprise and production environments
+
+**Features of Custom Scripts (Alternative):**
 - **Auto-detection:** Automatically detects ConnectX-7 devices and their PSIDs
 - **PSID matching:** Downloads correct firmware based on detected PSID
 - **Safety checks:** Verifies firmware compatibility before installation
@@ -520,10 +556,25 @@ sudo systemctl disable create-vf
 
 ### Key Commands
 
-```bash
-# Check MST status
-mst status
+#### MST (Mellanox Software Tools) Service Management
 
+```bash
+# Start MST service - Initializes the MST driver and creates device files
+# Required before using any MFT tools like mlxconfig, flint, or mlxlink
+sudo mst start
+
+# Check MST service status - Shows running MST devices and their paths
+# Displays all detected Mellanox devices with their /dev/mst/ paths
+sudo mst status
+
+# Stop MST service - Cleanly shuts down MST driver and removes device files
+# Use when troubleshooting or before system maintenance
+sudo mst stop
+```
+
+#### Device Management and Monitoring
+
+```bash
 # Query device configuration
 mlxconfig -d <device> query
 

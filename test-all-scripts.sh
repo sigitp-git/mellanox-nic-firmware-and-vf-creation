@@ -19,6 +19,9 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Test tracking variables
+CURRENT_TEST_PASSED=true
+
 # Test logging
 log_test() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - TEST: $1" | tee -a "$TEST_LOG"
@@ -30,7 +33,6 @@ log_info() {
 
 log_success() {
     echo -e "${GREEN}✅ $1${NC}" | tee -a "$TEST_LOG"
-    PASSED_TESTS=$((PASSED_TESTS + 1))
 }
 
 log_warning() {
@@ -39,12 +41,23 @@ log_warning() {
 
 log_error() {
     echo -e "${RED}❌ $1${NC}" | tee -a "$TEST_LOG"
-    FAILED_TESTS=$((FAILED_TESTS + 1))
+    CURRENT_TEST_PASSED=false
 }
 
 # Test counter
 run_test() {
+    # Finalize previous test if any
+    if [ $TOTAL_TESTS -gt 0 ]; then
+        if [ "$CURRENT_TEST_PASSED" = true ]; then
+            PASSED_TESTS=$((PASSED_TESTS + 1))
+        else
+            FAILED_TESTS=$((FAILED_TESTS + 1))
+        fi
+    fi
+    
+    # Start new test
     TOTAL_TESTS=$((TOTAL_TESTS + 1))
+    CURRENT_TEST_PASSED=true
     log_test "$1"
 }
 
@@ -495,6 +508,13 @@ test_integration_dry_run() {
 
 # Generate test report
 generate_test_report() {
+    # Finalize the last test
+    if [ "$CURRENT_TEST_PASSED" = true ]; then
+        PASSED_TESTS=$((PASSED_TESTS + 1))
+    else
+        FAILED_TESTS=$((FAILED_TESTS + 1))
+    fi
+    
     echo ""
     echo "=========================================="
     echo "           TEST REPORT SUMMARY"
@@ -505,7 +525,10 @@ generate_test_report() {
     echo -e "Failed: ${RED}$FAILED_TESTS${NC}"
     echo ""
     
-    local success_rate=$((PASSED_TESTS * 100 / TOTAL_TESTS))
+    local success_rate=0
+    if [ $TOTAL_TESTS -gt 0 ]; then
+        success_rate=$((PASSED_TESTS * 100 / TOTAL_TESTS))
+    fi
     echo "Success Rate: $success_rate%"
     echo ""
     

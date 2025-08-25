@@ -1,0 +1,537 @@
+$ aws ssm start-session --t i-123456789
+
+Starting session with SessionId: i-123456789-pzi94nd4njxn766p8fhv2lur5a
+sh-5.2$ cd
+sh-5.2$ sudo yum install git -y 
+
+sh-5.2$ sudo ./quick-test.sh
+🚀 Quick Test - Mellanox ConnectX-7 Scripts
+===========================================
+
+📁 Checking required files...
+  ✓ install-mft.sh
+  ✓ install-cx7-firmware.sh
+  ✓ update-cx7-firmware.sh
+  ✓ firmware-config.json
+  ✓ mlx-nic-health-check.sh
+
+🔧 Checking script permissions...
+  ✓ install-mft.sh (executable)
+  ✓ install-cx7-firmware.sh (executable)
+  ✓ update-cx7-firmware.sh (executable)
+  ✓ mlx-nic-health-check.sh (executable)
+
+❓ Testing help functions...
+  ✓ install-mft.sh --help works
+  ✓ install-cx7-firmware.sh --help works
+  ✓ update-cx7-firmware.sh --help works
+  ✓ mlx-nic-health-check.sh --help works
+
+📋 Validating JSON configuration...
+  ✓ firmware-config.json is valid
+
+🌐 Testing network connectivity...
+  ✓ NVIDIA website reachable
+
+🔍 Checking for ConnectX-7 hardware...
+  ✓ Found 4 ConnectX-7 device(s)
+
+✅ Quick test completed!
+
+Next steps:
+  • Run './test-all-scripts.sh' for comprehensive testing
+  • Test with actual hardware if available
+  • Run as root for full hardware validation
+
+
+===========================================
+
+sh-5.2$ ./test-all-scripts.sh 
+🧪 Starting Comprehensive Test Suite for Mellanox ConnectX-7 Scripts
+Test Log: /tmp/mellanox-test-20250825_002716.log
+
+2025-08-25 00:27:16 - TEST: Checking script file existence
+ℹ️  Found: install-mft.sh
+ℹ️  Found: install-cx7-firmware.sh
+ℹ️  Found: update-cx7-firmware.sh
+ℹ️  Found: firmware-config.json
+ℹ️  Found: mlx-nic-health-check.sh
+✅ All required scripts found
+2025-08-25 00:27:16 - TEST: Checking script permissions
+ℹ️  install-mft.sh is executable
+ℹ️  install-cx7-firmware.sh is executable
+ℹ️  update-cx7-firmware.sh is executable
+ℹ️  mlx-nic-health-check.sh is executable
+✅ All scripts have correct permissions
+2025-08-25 00:27:16 - TEST: Validating JSON configuration files
+✅ firmware-config.json is valid JSON
+ℹ️  Found required field: firmware_mappings
+ℹ️  Found required field: latest_lts_versions
+ℹ️  Found required field: download_base_url
+✅ All required JSON fields present
+2025-08-25 00:27:16 - TEST: Testing script help functions
+ℹ️  Testing help for install-mft.sh
+✅ install-mft.sh --help works
+✅ install-mft.sh -h works
+ℹ️  Testing help for install-cx7-firmware.sh
+✅ install-cx7-firmware.sh --help works
+✅ install-cx7-firmware.sh -h works
+ℹ️  Testing help for update-cx7-firmware.sh
+✅ update-cx7-firmware.sh --help works
+✅ update-cx7-firmware.sh -h works
+2025-08-25 00:27:16 - TEST: Testing version detection functions (dry run)
+ℹ️  Testing MFT version detection logic
+✅ MFT version detection function found
+✅ MFT version validation function found
+ℹ️  Testing firmware version detection logic
+✅ Firmware version detection function found
+✅ Firmware mapping loader function found
+2025-08-25 00:27:16 - TEST: Testing network connectivity for auto-detection
+ℹ️  Testing connectivity to: https://network.nvidia.com/products/adapter-software/firmware-tools/
+✅ ✓ Reachable: https://network.nvidia.com/products/adapter-software/firmware-tools/
+ℹ️  Testing connectivity to: https://network.nvidia.com/support/firmware/connectx7/
+✅ ✓ Reachable: https://network.nvidia.com/support/firmware/connectx7/
+ℹ️  Testing connectivity to: https://www.mellanox.com/downloads/MFT/
+✅ ✓ Reachable: https://www.mellanox.com/downloads/MFT/
+ℹ️  Testing connectivity to: https://www.mellanox.com/downloads/firmware/
+✅ ✓ Reachable: https://www.mellanox.com/downloads/firmware/
+✅ All required URLs are reachable
+2025-08-25 00:27:18 - TEST: Testing command-line argument parsing
+ℹ️  Testing install-mft.sh argument parsing
+✅ install-mft.sh has argument parsing
+ℹ️  Testing install-cx7-firmware.sh argument parsing
+✅ install-cx7-firmware.sh has argument parsing
+ℹ️  Testing update-cx7-firmware.sh argument parsing
+✅ update-cx7-firmware.sh has argument parsing
+2025-08-25 00:27:18 - TEST: Testing dependency availability
+ℹ️  Checking required dependencies:
+✅ ✓ wget available
+✅ ✓ curl available
+✅ ✓ tar available
+✅ ✓ unzip available
+✅ ✓ lspci available
+ℹ️  Checking optional dependencies:
+✅ ✓ jq available
+⚠️  ⚠ flint missing (optional)
+⚠️  ⚠ mst missing (optional)
+⚠️  ⚠ mlxconfig missing (optional)
+⚠️  ⚠ mlxlink missing (optional)
+✅ All required dependencies available
+ℹ️  Missing optional dependencies: flint mst mlxconfig mlxlink
+ℹ️  Install MFT tools for: flint, mst, mlxconfig, mlxlink
+ℹ️  Install jq for JSON parsing
+2025-08-25 00:27:18 - TEST: Testing hardware detection capabilities
+ℹ️  Checking for ConnectX-7 devices...
+✅ Found 4 ConnectX-7 device(s)
+ℹ️    Device: 0000:05:00.0 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+ℹ️    Device: 0000:05:00.1 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+ℹ️    Device: 0001:05:00.0 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+ℹ️    Device: 0001:05:00.1 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+⚠️  MST tools not installed
+2025-08-25 00:27:18 - TEST: Testing error handling and logging mechanisms
+ℹ️  Checking error handling in install-mft.sh
+✅ install-mft.sh has error handling
+✅ install-mft.sh has logging functions
+ℹ️  Checking error handling in install-cx7-firmware.sh
+✅ install-cx7-firmware.sh has error handling
+✅ install-cx7-firmware.sh has logging functions
+ℹ️  Checking error handling in update-cx7-firmware.sh
+⚠️  update-cx7-firmware.sh may lack comprehensive error handling
+⚠️  update-cx7-firmware.sh may lack logging functions
+2025-08-25 00:27:18 - TEST: Testing security and safety features
+ℹ️  Checking security features in install-mft.sh
+⚠️  install-mft.sh may not check for root privileges
+⚠️  install-mft.sh may lack user confirmation prompts
+ℹ️  Checking security features in install-cx7-firmware.sh
+✅ install-cx7-firmware.sh checks for root privileges
+✅ install-cx7-firmware.sh has user confirmation prompts
+✅ install-cx7-firmware.sh includes backup functionality
+ℹ️  Checking security features in update-cx7-firmware.sh
+⚠️  update-cx7-firmware.sh may not check for root privileges
+✅ update-cx7-firmware.sh has user confirmation prompts
+✅ update-cx7-firmware.sh includes backup functionality
+2025-08-25 00:27:18 - TEST: Integration test (dry run mode)
+ℹ️  Testing script integration without making changes...
+ℹ️  Testing update wrapper integration
+✅ Wrapper script references main installation script
+✅ Configuration file integration working
+
+==========================================
+           TEST REPORT SUMMARY
+==========================================
+
+Total Tests Run: 12
+Passed: 12
+Failed: 0
+
+Success Rate: 100%
+
+🎉 All tests passed! Scripts are ready for use.
+
+Detailed log saved to: /tmp/mellanox-test-20250825_002716.log
+
+Next Steps:
+✅ Scripts are ready for lab testing
+✅ Consider running with actual hardware for full validation
+ℹ️  Run as root for additional hardware-specific tests
+
+sh-5.2$ 
+
+===========================================
+
+sh-5.2$ sudo ./install-mft.sh 
+2025-08-25 00:32:53 - Starting Mellanox MFT installation
+2025-08-25 00:32:53 - Auto-detection enabled, attempting to find latest LTS version...
+2025-08-25 00:32:53 - Method 1: Parsing NVIDIA download page...
+2025-08-25 00:32:53 - Method 2: Probing for common LTS versions...
+2025-08-25 00:32:54 - ✅ Found available version: 4.30.1-1210
+2025-08-25 00:32:54 - ✅ Using auto-detected version: 4.30.1-1210
+2025-08-25 00:32:54 - Selected MFT version: 4.30.1-1210
+2025-08-25 00:32:54 - Package: mft-4.30.1-1210-x86_64-rpm.tgz
+2025-08-25 00:32:54 - Download URL: https://www.mellanox.com/downloads/MFT/mft-4.30.1-1210-x86_64-rpm.tgz
+
+=== MFT Installation Summary ===
+Version: 4.30.1-1210
+Package: mft-4.30.1-1210-x86_64-rpm.tgz
+Source: Auto-detected (latest available)
+=================================
+
+2025-08-25 00:32:54 - Installing dependencies...
+Last metadata expiration check: 0:51:39 ago on Sun Aug 24 23:41:15 2025.
+Package gcc-11.5.0-5.amzn2023.0.3.x86_64 is already installed.
+Package rpm-build-4.16.1.3-29.amzn2023.0.6.x86_64 is already installed.
+Package make-1:4.3-5.amzn2023.0.2.x86_64 is already installed.
+Package elfutils-libelf-devel-0.188-3.amzn2023.0.2.x86_64 is already installed.
+Package perl-4:5.32.1-477.amzn2023.0.6.x86_64 is already installed.
+Package lshw-B.02.19.2-7.amzn2023.0.3.x86_64 is already installed.
+Package jq-1.7.1-49.amzn2023.0.2.x86_64 is already installed.
+Package wget-1.21.3-1.amzn2023.0.4.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+2025-08-25 00:32:54 - Current kernel version: 6.1.132-147.221.amzn2023.x86_64
+2025-08-25 00:32:54 - Installing kernel-devel for current kernel...
+Last metadata expiration check: 0:51:40 ago on Sun Aug 24 23:41:15 2025.
+Package kernel-devel-6.1.132-147.221.amzn2023.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+2025-08-25 00:32:55 - Working in temporary directory: /tmp/tmp.tBSmSqivDP
+2025-08-25 00:32:55 - Downloading MFT package from: https://www.mellanox.com/downloads/MFT/mft-4.30.1-1210-x86_64-rpm.tgz
+--2025-08-25 00:32:55--  https://www.mellanox.com/downloads/MFT/mft-4.30.1-1210-x86_64-rpm.tgz
+Resolving www.mellanox.com (www.mellanox.com)... 23.53.35.140, 23.53.35.143
+Connecting to www.mellanox.com (www.mellanox.com)|23.53.35.140|:443... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://content.mellanox.com/MFT/mft-4.30.1-1210-x86_64-rpm.tgz [following]
+--2025-08-25 00:32:55--  https://content.mellanox.com/MFT/mft-4.30.1-1210-x86_64-rpm.tgz
+Resolving content.mellanox.com (content.mellanox.com)... 107.178.241.102
+Connecting to content.mellanox.com (content.mellanox.com)|107.178.241.102|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 72212536 (69M) [application/gzip]
+Saving to: ‘mft-4.30.1-1210-x86_64-rpm.tgz’
+
+mft-4.30.1-1210-x86_64-rpm.tgz 100%[====================================================>]  68.87M  20.7MB/s    in 3.8s    
+
+2025-08-25 00:32:59 (18.3 MB/s) - ‘mft-4.30.1-1210-x86_64-rpm.tgz’ saved [72212536/72212536]
+
+2025-08-25 00:32:59 - Download completed successfully
+2025-08-25 00:32:59 - Extracting MFT package...
+mft-4.30.1-1210-x86_64-rpm/LICENSE.txt
+mft-4.30.1-1210-x86_64-rpm/RPMS/
+mft-4.30.1-1210-x86_64-rpm/RPMS/mft-4.30.1-1210.x86_64.rpm
+mft-4.30.1-1210-x86_64-rpm/RPMS/mft-oem-4.30.1-1210.x86_64.rpm
+mft-4.30.1-1210-x86_64-rpm/RPMS/mft-autocomplete-4.30.1-1210.x86_64.rpm
+mft-4.30.1-1210-x86_64-rpm/RPMS/mft-pcap-4.30.1-1210.x86_64.rpm
+mft-4.30.1-1210-x86_64-rpm/SDEBS/
+mft-4.30.1-1210-x86_64-rpm/SDEBS/kernel-mft-dkms_4.30.1-1210_all.deb
+mft-4.30.1-1210-x86_64-rpm/SRPMS/
+mft-4.30.1-1210-x86_64-rpm/SRPMS/kernel-mft-4.30.1-1210.src.rpm
+mft-4.30.1-1210-x86_64-rpm/install.sh
+mft-4.30.1-1210-x86_64-rpm/old-mft-uninstall.sh
+mft-4.30.1-1210-x86_64-rpm/uninstall.sh
+2025-08-25 00:33:00 - Running MFT installation...
+-I- Removing any old MFT file if exists...
+-I- Building the MFT kernel binary RPM...
+-I- Installing the MFT RPMs...
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:kernel-mft-4.30.1-6.1.132_147.221################################# [100%]
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:mft-4.30.1-1210                  ################################# [100%]
+Verifying...                          ################################# [100%]
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:mft-autocomplete-4.30.1-1210     ################################# [100%]
+-I- In order to start mst, please run "mst start".
+2025-08-25 00:33:10 - MFT installation completed successfully
+2025-08-25 00:33:10 - Starting MST service...
+Starting MST (Mellanox Software Tools) driver set
+Loading MST PCI module - Success
+Loading MST PCI configuration module - Success
+Create devices
+-W- Missing "lsusb" command, skipping MTUSB devices detection
+Unloading MST PCI module (unused) - Success
+2025-08-25 00:33:11 - MST service started successfully
+2025-08-25 00:33:11 - Verifying installation...
+2025-08-25 00:33:11 - ✅ mlxconfig command available
+2025-08-25 00:33:11 - ✅ mlxlink command available
+2025-08-25 00:33:11 - ✅ flint command available
+2025-08-25 00:33:11 - MST Status:
+MST modules:
+------------
+    MST PCI module is not loaded
+    MST PCI configuration module loaded
+
+MST devices:
+------------
+/dev/mst/mt4129_pciconf0         - PCI configuration cycles access.
+                                   domain:bus:dev.fn=0000:05:00.0 addr.reg=88 data.reg=92 cr_bar.gw_offset=-1
+                                   Chip revision is: 00
+/dev/mst/mt4129_pciconf1         - PCI configuration cycles access.
+                                   domain:bus:dev.fn=0001:05:00.0 addr.reg=88 data.reg=92 cr_bar.gw_offset=-1
+                                   Chip revision is: 00
+
+2025-08-25 00:33:11 - Temporary files cleaned up
+2025-08-25 00:33:11 - Checking for ConnectX-7 devices...
+2025-08-25 00:33:11 - ✅ Found 4 ConnectX-7 device(s)
+0000:05:00.0 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+0000:05:00.1 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+0001:05:00.0 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+0001:05:00.1 Ethernet controller: Mellanox Technologies MT2910 Family [ConnectX-7]
+2025-08-25 00:33:11 - MFT installation script completed
+2025-08-25 00:33:11 - Next steps:
+2025-08-25 00:33:11 - 1. Run health check: sudo ./mlx-nic-health-check.sh
+2025-08-25 00:33:11 - 2. Configure VFs if needed: sudo ./create-virtual-function.sh
+2025-08-25 00:33:11 - 3. Check firmware versions and update if necessary
+
+Installation completed! Check /var/log/mft-install.log for detailed logs.
+sh-5.2$ 
+
+
+======================================
+
+sh-5.2$ sudo ./mlx-nic-health-check.sh
+=== Mellanox NIC Health Check ===
+Timestamp: Mon Aug 25 00:34:02 UTC 2025
+Hostname: ip-10-0-49-172.ec2.internal
+Starting MST service...
+Starting MST (Mellanox Software Tools) driver set
+Loading MST PCI module - Success
+[warn] mst_pciconf is already loaded, skipping
+Create devices
+-W- Missing "lsusb" command, skipping MTUSB devices detection
+Unloading MST PCI module (unused) - Success
+
+=== MST Status ===
+MST modules:
+------------
+    MST PCI module is not loaded
+    MST PCI configuration module loaded
+
+MST devices:
+------------
+/dev/mst/mt4129_pciconf0         - PCI configuration cycles access.
+                                   domain:bus:dev.fn=0000:05:00.0 addr.reg=88 data.reg=92 cr_bar.gw_offset=-1
+                                   Chip revision is: 00
+/dev/mst/mt4129_pciconf1         - PCI configuration cycles access.
+                                   domain:bus:dev.fn=0001:05:00.0 addr.reg=88 data.reg=92 cr_bar.gw_offset=-1
+                                   Chip revision is: 00
+
+
+=== Detecting ConnectX-7 Devices ===
+Found 4 ConnectX-7 device(s): 0000:05:00.0 0000:05:00.1 0001:05:00.0 0001:05:00.1
+
+========================================
+=== Device: 0000:05:00.0 ===
+========================================
+
+--- Configuration Status ---
+Device type:        ConnectX7           
+Name:               MCX755106AS-HEA_Ax  
+Description:        NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+Configurations:                                          Next Boot
+
+--- Link Status ---
+Port 1:
+Operational Info
+Physical state                     : LinkUp 
+Speed                              : 200G 
+Width                              : 4x 
+Enabled Link Speed (Ext.)          : 0x00003ff2 (200G_2X,200G_4X,100G_1X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G) 
+Supported Cable Speed (Ext.)       : 0x000017f2 (200G_4X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G) 
+Port 2:
+  Port 2 not available or link down
+
+--- Firmware Information ---
+FW Version:            28.40.1000
+Product Version:       28.40.1000
+Description:           UID                GuidsNumber
+PSID:                  MT_0000000834
+
+--- Temperature Monitoring ---
+Temperature: 63             °C
+✅ Temperature normal (63             °C)
+
+--- PCIe Information ---
+                LnkCap: Port #0, Speed 32GT/s, Width x16, ASPM not supported
+                LnkSta: Speed 32GT/s (ok), Width x16 (ok)
+                LnkCap2: Supported Link Speeds: 2.5-32GT/s, Crosslink- Retimer+ 2Retimers+ DRS-
+                LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+ EqualizationPhase1+
+
+========================================
+=== Device: 0000:05:00.1 ===
+========================================
+
+--- Configuration Status ---
+Device type:        ConnectX7           
+Name:               MCX755106AS-HEA_Ax  
+Description:        NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+Configurations:                                          Next Boot
+
+--- Link Status ---
+Port 1:
+Operational Info
+Physical state                     : LinkUp 
+Speed                              : 200G 
+Width                              : 4x 
+Enabled Link Speed (Ext.)          : 0x00003ff2 (200G_2X,200G_4X,100G_1X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G) 
+Supported Cable Speed (Ext.)       : 0x000017f2 (200G_4X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G) 
+Port 2:
+  Port 2 not available or link down
+
+--- Firmware Information ---
+FW Version:            28.40.1000
+Product Version:       28.40.1000
+Description:           UID                GuidsNumber
+PSID:                  MT_0000000834
+
+--- Temperature Monitoring ---
+Temperature: 62             °C
+✅ Temperature normal (62             °C)
+
+--- PCIe Information ---
+                LnkCap: Port #0, Speed 32GT/s, Width x16, ASPM not supported
+                LnkSta: Speed 32GT/s (ok), Width x16 (ok)
+                LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete- EqualizationPhase1-
+
+========================================
+=== Device: 0001:05:00.0 ===
+========================================
+
+--- Configuration Status ---
+Device type:        ConnectX7           
+Name:               MCX755106AS-HEA_Ax  
+Description:        NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+Configurations:                                          Next Boot
+
+--- Link Status ---
+Port 1:
+Operational Info
+Physical state                     : LinkUp 
+Speed                              : 200G 
+Width                              : 4x 
+Enabled Link Speed (Ext.)          : 0x00003ff2 (200G_2X,200G_4X,100G_1X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G) 
+Supported Cable Speed (Ext.)       : 0x000017f2 (200G_4X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G) 
+Port 2:
+  Port 2 not available or link down
+
+--- Firmware Information ---
+FW Version:            28.40.1000
+Product Version:       28.40.1000
+Description:           UID                GuidsNumber
+PSID:                  MT_0000000834
+
+--- Temperature Monitoring ---
+Temperature: 62             °C
+✅ Temperature normal (62             °C)
+
+--- PCIe Information ---
+                LnkCap: Port #0, Speed 32GT/s, Width x16, ASPM not supported
+                LnkSta: Speed 32GT/s (ok), Width x16 (ok)
+                LnkCap2: Supported Link Speeds: 2.5-32GT/s, Crosslink- Retimer+ 2Retimers+ DRS-
+                LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+ EqualizationPhase1+
+
+========================================
+=== Device: 0001:05:00.1 ===
+========================================
+
+--- Configuration Status ---
+Device type:        ConnectX7           
+Name:               MCX755106AS-HEA_Ax  
+Description:        NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+Configurations:                                          Next Boot
+
+--- Link Status ---
+Port 1:
+Operational Info
+Physical state                     : LinkUp 
+Speed                              : 200G 
+Width                              : 4x 
+Enabled Link Speed (Ext.)          : 0x00003ff2 (200G_2X,200G_4X,100G_1X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G) 
+Supported Cable Speed (Ext.)       : 0x000017f2 (200G_4X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G) 
+Port 2:
+  Port 2 not available or link down
+
+--- Firmware Information ---
+FW Version:            28.40.1000
+Product Version:       28.40.1000
+Description:           UID                GuidsNumber
+PSID:                  MT_0000000834
+
+--- Temperature Monitoring ---
+Temperature: 62             °C
+✅ Temperature normal (62             °C)
+
+--- PCIe Information ---
+                LnkCap: Port #0, Speed 32GT/s, Width x16, ASPM not supported
+                LnkSta: Speed 32GT/s (ok), Width x16 (ok)
+                LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete- EqualizationPhase1-
+
+========================================
+=== Virtual Function Status ===
+========================================
+
+Device 0000:05:00.0:
+  Configured VFs: 16
+  ⚠️  Partial VF configuration (16/127)
+
+Device 0000:05:00.1:
+  Configured VFs: 16
+  ⚠️  Partial VF configuration (16/127)
+
+Device 0001:05:00.0:
+  Configured VFs: 16
+  ⚠️  Partial VF configuration (16/127)
+
+Device 0001:05:00.1:
+  Configured VFs: 16
+  ⚠️  Partial VF configuration (16/127)
+
+========================================
+=== Network Interface Status ===
+========================================
+ConnectX-7 Network Interfaces:
+  Interface: ens1f0np0 - Ethernet interface
+  Interface: ens1f1np1 - Ethernet interface
+  Interface: enP1s11f0np0 - Ethernet interface
+  Interface: enP1s11f1np1 - Ethernet interface
+
+========================================
+=== Health Check Summary ===
+========================================
+Devices checked: 4
+Timestamp: Mon Aug 25 00:34:31 UTC 2025
+Status: Health check completed
+
+💡 Tip: Run 'sudo systemctl status create-vf.service' to check VF creation service status
+💡 Tip: Monitor logs with 'dmesg | grep -i mellanox' for hardware messages
+sh-5.2$ 
+
+
+================================================
+
+
+sh-5.2$ sudo ./update-cx7-firmware.sh 
