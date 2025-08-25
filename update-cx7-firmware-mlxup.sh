@@ -156,39 +156,33 @@ download_mlxup_from_nvidia() {
     # Step 1: Determine mlxup version to download
     log "Detecting latest mlxup version..."
     
-    # Try multiple methods to detect the version
-    local latest_version=""
+    # Use known current working version as primary method
+    local latest_version="4.30.0"
     
-    # Method 1: Parse the mlxup page
-    local page_content=$(curl -s --connect-timeout 15 "$MLXUP_URL" 2>/dev/null || echo "")
-    
-    if [ -n "$page_content" ]; then
-        # Look for mlxup-specific version patterns, prioritizing 4.30.x versions
-        local versions=($(echo "$page_content" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | grep -E '^4\.(3[0-9]|[4-9][0-9])\.' | sort -V -u -r))
+    # Verify this version exists
+    local test_url="https://www.mellanox.com/downloads/firmware/mlxup/${latest_version}/SFX/linux_x64/mlxup"
+    log "Verifying version $latest_version is available..."
+    if curl -I --connect-timeout 5 --max-time 10 -f "$test_url" >/dev/null 2>&1; then
+        log "✅ Confirmed version $latest_version is available"
+    else
+        log "⚠️  Version $latest_version not confirmed, trying web detection..."
         
-        # If no 4.30+ versions found, look for any 4.x versions
-        if [ ${#versions[@]} -eq 0 ]; then
-            versions=($(echo "$page_content" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | grep -E '^4\.' | sort -V -u -r))
-        fi
+        # Fallback: Parse the mlxup page
+        local page_content=$(curl -s --connect-timeout 15 "$MLXUP_URL" 2>/dev/null || echo "")
         
-        if [ ${#versions[@]} -gt 0 ]; then
-            latest_version="${versions[0]}"
-        fi
-    fi
-    
-    # Method 2: Use known recent versions as fallback
-    if [ -z "$latest_version" ]; then
-        log "⚠️  Could not auto-detect version from web, using known current version..."
-        # Start with the current known working version
-        latest_version="4.30.0"
-        
-        # Verify this version exists
-        local test_url="https://www.mellanox.com/downloads/firmware/mlxup/${latest_version}/SFX/linux_x64/mlxup"
-        log "Verifying version $latest_version is available..."
-        if curl -I --connect-timeout 5 --max-time 10 -f "$test_url" >/dev/null 2>&1; then
-            log "✅ Confirmed version $latest_version is available"
-        else
-            log "⚠️  Could not verify version $latest_version, but will attempt download anyway"
+        if [ -n "$page_content" ]; then
+            # Look for mlxup-specific version patterns, prioritizing 4.30.x versions
+            local versions=($(echo "$page_content" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | grep -E '^4\.(3[0-9]|[4-9][0-9])\.' | sort -V -u -r))
+            
+            # If no 4.30+ versions found, look for any 4.x versions
+            if [ ${#versions[@]} -eq 0 ]; then
+                versions=($(echo "$page_content" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | grep -E '^4\.' | sort -V -u -r))
+            fi
+            
+            if [ ${#versions[@]} -gt 0 ]; then
+                latest_version="${versions[0]}"
+                log "Web detection found version: $latest_version"
+            fi
         fi
     fi
     
