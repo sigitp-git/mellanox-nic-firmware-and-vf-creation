@@ -157,6 +157,16 @@ The following table shows the mapping between PSID (Parameter-Set IDentification
    sudo ./create-virtual-function.sh           # Configure hardware VF limits and create VFs
    # Note: Reboot may be required if hardware VF limits are changed
    ```
+6. **Create SystemD service**: To make sure VFs configuration persists reboot
+  ```bash
+   sudo ./create-vf.service
+   sudo systemctl status create-vf.service
+   ```
+   
+   Or execute this script at every boot/after reboot:
+   ```bash
+   sudo ./create-virtual-function.sh
+   ```
 
 ## Testing Framework
 

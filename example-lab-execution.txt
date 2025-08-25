@@ -727,80 +727,356 @@ Next steps:
 2025-08-25 02:18:23 - Script execution completed
 sh-5.2$ 
 
+==============================================
+
+WARNING
+
+REMOVE EC2 INSTANCE FROM ASG BEFORE REBOOTING
+
+WARNING
+
+===============================================
+
+AFTER REBOOT COMPLETED
+
 =============================================
 
 
-sh-5.2$ sudo ./create-virtual-function.sh 
-2025-08-25 02:44:38 - Starting Virtual Function creation script
-2025-08-25 02:44:38 - ✅ mlxconfig found - hardware VF configuration will be performed
-2025-08-25 02:44:38 - Detecting ConnectX-7 network interfaces...
-2025-08-25 02:44:40 - Found 4 ConnectX-7 interface(s): ens1f0np0 ens1f1np1 enP1s11f0np0 enP1s11f1np1
-2025-08-25 02:44:40 - Configuring hardware VF limits using mlxconfig...
-2025-08-25 02:44:40 - Processing Mellanox device: 0000:05:00.0
-2025-08-25 02:44:43 - Current hardware VF limit for 0000:05:00.0: 127
-2025-08-25 02:44:43 - Hardware VF limit already correct for 0000:05:00.0 (127)
-2025-08-25 02:44:43 - Processing Mellanox device: 0000:05:00.1
-2025-08-25 02:44:47 - Current hardware VF limit for 0000:05:00.1: 127
-2025-08-25 02:44:47 - Hardware VF limit already correct for 0000:05:00.1 (127)
-2025-08-25 02:44:47 - Processing Mellanox device: 0001:05:00.0
-2025-08-25 02:44:50 - Current hardware VF limit for 0001:05:00.0: 127
-2025-08-25 02:44:50 - Hardware VF limit already correct for 0001:05:00.0 (127)
-2025-08-25 02:44:50 - Processing Mellanox device: 0001:05:00.1
-2025-08-25 02:44:53 - Current hardware VF limit for 0001:05:00.1: 127
-2025-08-25 02:44:53 - Hardware VF limit already correct for 0001:05:00.1 (127)
-2025-08-25 02:44:53 - Processing interface: ens1f0np0
-2025-08-25 02:44:53 - Current VFs for ens1f0np0: 0
-2025-08-25 02:44:53 - Maximum supported VFs for ens1f0np0: 16
-2025-08-25 02:44:53 - Attempting to create 127 Virtual Functions for interface: ens1f0np0
-2025-08-25 02:44:53 - Current VFs: 0, Hardware maximum: 16
-2025-08-25 02:44:53 - Step 1: Resetting VFs to 0 for ens1f0np0...
-2025-08-25 02:44:53 - ✅ Successfully reset VFs to 0 for ens1f0np0
-2025-08-25 02:45:03 - Verified reset: ens1f0np0 now has 0 VFs
-2025-08-25 02:45:03 - Step 2: Setting VFs to 127 for ens1f0np0...
-2025-08-25 02:45:03 - ❌ Failed to set VFs to 127 for ens1f0np0
-2025-08-25 02:45:03 -    This may indicate the hardware limit hasn't been applied yet (reboot required)
-2025-08-25 02:45:03 - Processing interface: ens1f1np1
-2025-08-25 02:45:03 - Current VFs for ens1f1np1: 0
-2025-08-25 02:45:03 - Maximum supported VFs for ens1f1np1: 16
-2025-08-25 02:45:03 - Attempting to create 127 Virtual Functions for interface: ens1f1np1
-2025-08-25 02:45:03 - Current VFs: 0, Hardware maximum: 16
-2025-08-25 02:45:03 - Step 1: Resetting VFs to 0 for ens1f1np1...
-2025-08-25 02:45:03 - ✅ Successfully reset VFs to 0 for ens1f1np1
-2025-08-25 02:45:13 - Verified reset: ens1f1np1 now has 0 VFs
-2025-08-25 02:45:13 - Step 2: Setting VFs to 127 for ens1f1np1...
-2025-08-25 02:45:13 - ❌ Failed to set VFs to 127 for ens1f1np1
-2025-08-25 02:45:13 -    This may indicate the hardware limit hasn't been applied yet (reboot required)
-2025-08-25 02:45:13 - Processing interface: enP1s11f0np0
-2025-08-25 02:45:13 - Current VFs for enP1s11f0np0: 0
-2025-08-25 02:45:13 - Maximum supported VFs for enP1s11f0np0: 16
-2025-08-25 02:45:13 - Attempting to create 127 Virtual Functions for interface: enP1s11f0np0
-2025-08-25 02:45:13 - Current VFs: 0, Hardware maximum: 16
-2025-08-25 02:45:13 - Step 1: Resetting VFs to 0 for enP1s11f0np0...
-2025-08-25 02:45:13 - ✅ Successfully reset VFs to 0 for enP1s11f0np0
-2025-08-25 02:45:23 - Verified reset: enP1s11f0np0 now has 0 VFs
-2025-08-25 02:45:23 - Step 2: Setting VFs to 127 for enP1s11f0np0...
-2025-08-25 02:45:23 - ❌ Failed to set VFs to 127 for enP1s11f0np0
-2025-08-25 02:45:23 -    This may indicate the hardware limit hasn't been applied yet (reboot required)
-2025-08-25 02:45:23 - Processing interface: enP1s11f1np1
-2025-08-25 02:45:23 - Current VFs for enP1s11f1np1: 0
-2025-08-25 02:45:23 - Maximum supported VFs for enP1s11f1np1: 16
-2025-08-25 02:45:23 - Attempting to create 127 Virtual Functions for interface: enP1s11f1np1
-2025-08-25 02:45:23 - Current VFs: 0, Hardware maximum: 16
-2025-08-25 02:45:23 - Step 1: Resetting VFs to 0 for enP1s11f1np1...
-2025-08-25 02:45:23 - ✅ Successfully reset VFs to 0 for enP1s11f1np1
-2025-08-25 02:45:33 - Verified reset: enP1s11f1np1 now has 0 VFs
-2025-08-25 02:45:33 - Step 2: Setting VFs to 127 for enP1s11f1np1...
-2025-08-25 02:45:33 - ❌ Failed to set VFs to 127 for enP1s11f1np1
-2025-08-25 02:45:33 -    This may indicate the hardware limit hasn't been applied yet (reboot required)
-2025-08-25 02:45:33 - Virtual Function creation completed
-2025-08-25 02:45:33 - Summary:
-2025-08-25 02:45:33 -   ens1f0np0: 0 VFs
-2025-08-25 02:45:33 -   ens1f1np1: 0 VFs
-2025-08-25 02:45:33 -   enP1s11f0np0: 0 VFs
-2025-08-25 02:45:33 -   enP1s11f1np1: 0 VFs
-2025-08-25 02:45:33 - Script execution finished
-sh-5.2$ 
+sh-5.2$ sudo ./create-virtual-function.sh
+2025-08-25 04:26:14 - Starting Virtual Function creation script
+2025-08-25 04:26:14 - ✅ mlxconfig found - hardware VF configuration will be performed
+2025-08-25 04:26:14 - Detecting ConnectX-7 network interfaces...
+2025-08-25 04:26:16 - Found 4 ConnectX-7 interface(s): ens1f0np0 ens1f1np1 enP1s11f0np0 enP1s11f1np1
+2025-08-25 04:26:16 - Configuring hardware VF limits using mlxconfig...
+2025-08-25 04:26:16 - Processing Mellanox device: 0000:05:00.0
+2025-08-25 04:26:19 - Current hardware VF limit for 0000:05:00.0: 127
+2025-08-25 04:26:19 - Hardware VF limit already correct for 0000:05:00.0 (127)
+2025-08-25 04:26:19 - Processing Mellanox device: 0000:05:00.1
+2025-08-25 04:26:23 - Current hardware VF limit for 0000:05:00.1: 127
+2025-08-25 04:26:23 - Hardware VF limit already correct for 0000:05:00.1 (127)
+2025-08-25 04:26:23 - Processing Mellanox device: 0001:05:00.0
+2025-08-25 04:26:26 - Current hardware VF limit for 0001:05:00.0: 127
+2025-08-25 04:26:26 - Hardware VF limit already correct for 0001:05:00.0 (127)
+2025-08-25 04:26:26 - Processing Mellanox device: 0001:05:00.1
+2025-08-25 04:26:29 - Current hardware VF limit for 0001:05:00.1: 127
+2025-08-25 04:26:29 - Hardware VF limit already correct for 0001:05:00.1 (127)
+2025-08-25 04:26:29 - Processing interface: ens1f0np0
+2025-08-25 04:26:29 - Current VFs for ens1f0np0: 0
+2025-08-25 04:26:29 - Maximum supported VFs for ens1f0np0: 127
+2025-08-25 04:26:29 - Attempting to create 127 Virtual Functions for interface: ens1f0np0
+2025-08-25 04:26:29 - Current VFs: 0, Hardware maximum: 127
+2025-08-25 04:26:29 - Step 1: Resetting VFs to 0 for ens1f0np0...
+2025-08-25 04:26:29 - ✅ Successfully reset VFs to 0 for ens1f0np0
+2025-08-25 04:26:39 - Verified reset: ens1f0np0 now has 0 VFs
+2025-08-25 04:26:39 - Step 2: Setting VFs to 127 for ens1f0np0...
+2025-08-25 04:27:15 - ✅ Successfully set VFs to 127 for ens1f0np0
+2025-08-25 04:27:25 - ✅ VF creation verified for ens1f0np0: 127 VFs active (max: 127)
+2025-08-25 04:27:25 - Processing interface: ens1f1np1
+2025-08-25 04:27:25 - Current VFs for ens1f1np1: 0
+2025-08-25 04:27:25 - Maximum supported VFs for ens1f1np1: 127
+2025-08-25 04:27:25 - Attempting to create 127 Virtual Functions for interface: ens1f1np1
+2025-08-25 04:27:25 - Current VFs: 0, Hardware maximum: 127
+2025-08-25 04:27:25 - Step 1: Resetting VFs to 0 for ens1f1np1...
+2025-08-25 04:27:25 - ✅ Successfully reset VFs to 0 for ens1f1np1
+2025-08-25 04:27:35 - Verified reset: ens1f1np1 now has 0 VFs
+2025-08-25 04:27:35 - Step 2: Setting VFs to 127 for ens1f1np1...
+2025-08-25 04:28:15 - ✅ Successfully set VFs to 127 for ens1f1np1
+2025-08-25 04:28:25 - ✅ VF creation verified for ens1f1np1: 127 VFs active (max: 127)
+2025-08-25 04:28:25 - Processing interface: enP1s11f0np0
+2025-08-25 04:28:25 - Current VFs for enP1s11f0np0: 0
+2025-08-25 04:28:25 - Maximum supported VFs for enP1s11f0np0: 127
+2025-08-25 04:28:25 - Attempting to create 127 Virtual Functions for interface: enP1s11f0np0
+2025-08-25 04:28:25 - Current VFs: 0, Hardware maximum: 127
+2025-08-25 04:28:25 - Step 1: Resetting VFs to 0 for enP1s11f0np0...
+2025-08-25 04:28:25 - ✅ Successfully reset VFs to 0 for enP1s11f0np0
+2025-08-25 04:28:35 - Verified reset: enP1s11f0np0 now has 0 VFs
+2025-08-25 04:28:35 - Step 2: Setting VFs to 127 for enP1s11f0np0...
+2025-08-25 04:29:17 - ✅ Successfully set VFs to 127 for enP1s11f0np0
+2025-08-25 04:29:27 - ✅ VF creation verified for enP1s11f0np0: 127 VFs active (max: 127)
+2025-08-25 04:29:27 - Processing interface: enP1s11f1np1
+2025-08-25 04:29:27 - Current VFs for enP1s11f1np1: 0
+2025-08-25 04:29:27 - Maximum supported VFs for enP1s11f1np1: 127
+2025-08-25 04:29:27 - Attempting to create 127 Virtual Functions for interface: enP1s11f1np1
+2025-08-25 04:29:27 - Current VFs: 0, Hardware maximum: 127
+2025-08-25 04:29:27 - Step 1: Resetting VFs to 0 for enP1s11f1np1...
+2025-08-25 04:29:27 - ✅ Successfully reset VFs to 0 for enP1s11f1np1
+2025-08-25 04:29:37 - Verified reset: enP1s11f1np1 now has 0 VFs
+2025-08-25 04:29:37 - Step 2: Setting VFs to 127 for enP1s11f1np1...
+2025-08-25 04:30:22 - ✅ Successfully set VFs to 127 for enP1s11f1np1
+2025-08-25 04:30:32 - ✅ VF creation verified for enP1s11f1np1: 127 VFs active (max: 127)
+2025-08-25 04:30:32 - Virtual Function creation completed
+2025-08-25 04:30:32 - Summary:
+2025-08-25 04:30:32 -   ens1f0np0: 127 VFs
+2025-08-25 04:30:32 -   ens1f1np1: 127 VFs
+2025-08-25 04:30:32 -   enP1s11f0np0: 127 VFs
+2025-08-25 04:30:32 -   enP1s11f1np1: 127 VFs
+2025-08-25 04:30:32 - Script execution finished
+sh-5.2$
+
+===============================================
+
+sh-5.2$ sudo ./mlx-nic-health-check.sh
+=== Mellanox NIC Health Check ===
+Timestamp: Mon Aug 25 04:19:54 UTC 2025
+Hostname: ip-10-0-52-166.ec2.internal
+Starting MST service...
+Starting MST (Mellanox Software Tools) driver set
+Loading MST PCI module - Success
+[warn] mst_pciconf is already loaded, skipping
+Create devices
+-W- Missing "lsusb" command, skipping MTUSB devices detection
+Unloading MST PCI module (unused) - Success
+
+=== MST Status ===
+MST modules:
+------------
+    MST PCI module is not loaded
+    MST PCI configuration module loaded
+
+MST devices:
+------------
+/dev/mst/mt4129_pciconf0         - PCI configuration cycles access.
+                                   domain:bus:dev.fn=0000:05:00.0 addr.reg=88 data.reg=92 cr_bar.gw_offset=-1
+                                   Chip revision is: 00
+/dev/mst/mt4129_pciconf1         - PCI configuration cycles access.
+                                   domain:bus:dev.fn=0001:05:00.0 addr.reg=88 data.reg=92 cr_bar.gw_offset=-1
+                                   Chip revision is: 00
 
 
-==================================
+=== Detecting ConnectX-7 Devices ===
+Found 4 ConnectX-7 device(s): 0000:05:00.0 0000:05:00.1 0001:05:00.0 0001:05:00.1
 
+========================================
+=== Device: 0000:05:00.0 ===
+========================================
+
+--- Configuration Status ---
+Device type:        ConnectX7
+Name:               MCX755106AS-HEA_Ax
+Description:        NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+Configurations:                                          Next Boot
+
+--- Link Status ---
+Port 1:
+Operational Info
+Physical state                     : LinkUp
+Speed                              : 200G
+Width                              : 4x
+Enabled Link Speed (Ext.)          : 0x00003ff2 (200G_2X,200G_4X,100G_1X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G)
+Supported Cable Speed (Ext.)       : 0x000017f2 (200G_4X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G)
+Port 2:
+  Port 2 not available or link down
+
+--- Firmware Information ---
+FW Version:            28.43.1014
+Product Version:       28.43.1014
+Description:           UID                GuidsNumber
+PSID:                  MT_0000000834
+
+--- Temperature Monitoring ---
+Temperature: 67             °C
+✅ Temperature normal (67             °C)
+
+--- PCIe Information ---
+		LnkCap:	Port #0, Speed 32GT/s, Width x16, ASPM not supported
+		LnkSta:	Speed 32GT/s (ok), Width x16 (ok)
+		LnkCap2: Supported Link Speeds: 2.5-32GT/s, Crosslink- Retimer+ 2Retimers+ DRS-
+		LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+ EqualizationPhase1+
+
+========================================
+=== Device: 0000:05:00.1 ===
+========================================
+
+--- Configuration Status ---
+Device type:        ConnectX7
+Name:               MCX755106AS-HEA_Ax
+Description:        NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+Configurations:                                          Next Boot
+
+--- Link Status ---
+Port 1:
+Operational Info
+Physical state                     : LinkUp
+Speed                              : 200G
+Width                              : 4x
+Enabled Link Speed (Ext.)          : 0x00003ff2 (200G_2X,200G_4X,100G_1X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G)
+Supported Cable Speed (Ext.)       : 0x000017f2 (200G_4X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G)
+Port 2:
+  Port 2 not available or link down
+
+--- Firmware Information ---
+FW Version:            28.43.1014
+Product Version:       28.43.1014
+Description:           UID                GuidsNumber
+PSID:                  MT_0000000834
+
+--- Temperature Monitoring ---
+Temperature: 67             °C
+✅ Temperature normal (67             °C)
+
+--- PCIe Information ---
+		LnkCap:	Port #0, Speed 32GT/s, Width x16, ASPM not supported
+		LnkSta:	Speed 32GT/s (ok), Width x16 (ok)
+		LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete- EqualizationPhase1-
+
+========================================
+=== Device: 0001:05:00.0 ===
+========================================
+
+--- Configuration Status ---
+Device type:        ConnectX7
+Name:               MCX755106AS-HEA_Ax
+Description:        NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+Configurations:                                          Next Boot
+
+--- Link Status ---
+Port 1:
+Operational Info
+Physical state                     : LinkUp
+Speed                              : 200G
+Width                              : 4x
+Enabled Link Speed (Ext.)          : 0x00003ff2 (200G_2X,200G_4X,100G_1X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G)
+Supported Cable Speed (Ext.)       : 0x000017f2 (200G_4X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G)
+Port 2:
+  Port 2 not available or link down
+
+--- Firmware Information ---
+FW Version:            28.43.1014
+Product Version:       28.43.1014
+Description:           UID                GuidsNumber
+PSID:                  MT_0000000834
+
+--- Temperature Monitoring ---
+Temperature: 67             °C
+✅ Temperature normal (67             °C)
+
+--- PCIe Information ---
+		LnkCap:	Port #0, Speed 32GT/s, Width x16, ASPM not supported
+		LnkSta:	Speed 32GT/s (ok), Width x16 (ok)
+		LnkCap2: Supported Link Speeds: 2.5-32GT/s, Crosslink- Retimer+ 2Retimers+ DRS-
+		LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+ EqualizationPhase1+
+
+========================================
+=== Device: 0001:05:00.1 ===
+========================================
+
+--- Configuration Status ---
+Device type:        ConnectX7
+Name:               MCX755106AS-HEA_Ax
+Description:        NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x16 PCIe extension option; Crypto Disabled; Secure Boot Enabled
+Configurations:                                          Next Boot
+
+--- Link Status ---
+Port 1:
+Operational Info
+Physical state                     : LinkUp
+Speed                              : 200G
+Width                              : 4x
+Enabled Link Speed (Ext.)          : 0x00003ff2 (200G_2X,200G_4X,100G_1X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G)
+Supported Cable Speed (Ext.)       : 0x000017f2 (200G_4X,100G_2X,100G_4X,50G_1X,50G_2X,40G,25G,10G,1G)
+Port 2:
+  Port 2 not available or link down
+
+--- Firmware Information ---
+FW Version:            28.43.1014
+Product Version:       28.43.1014
+Description:           UID                GuidsNumber
+PSID:                  MT_0000000834
+
+--- Temperature Monitoring ---
+Temperature: 67             °C
+✅ Temperature normal (67             °C)
+
+--- PCIe Information ---
+		LnkCap:	Port #0, Speed 32GT/s, Width x16, ASPM not supported
+		LnkSta:	Speed 32GT/s (ok), Width x16 (ok)
+		LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete- EqualizationPhase1-
+
+========================================
+=== Virtual Function Status ===
+========================================
+
+Device 0000:05:00.0:
+  Configured VFs: 127
+  ✅ Maximum VFs configured
+
+Device 0000:05:00.1:
+  Configured VFs: 127
+  ✅ Maximum VFs configured
+
+Device 0001:05:00.0:
+  Configured VFs: 127
+  ✅ Maximum VFs configured
+
+Device 0001:05:00.1:
+  Configured VFs: 127
+  ✅ Maximum VFs configured
+
+========================================
+=== Network Interface Status ===
+========================================
+ConnectX-7 Network Interfaces:
+  Interface: ens1f0np0 - Ethernet interface
+  Interface: ens1f1np1 - Ethernet interface
+  Interface: enP1s11f0np0 - Ethernet interface
+  Interface: enP1s11f1np1 - Ethernet interface
+
+========================================
+=== Health Check Summary ===
+========================================
+Devices checked: 4
+Timestamp: Mon Aug 25 04:20:23 UTC 2025
+Status: Health check completed
+
+💡 Tip: Run 'sudo systemctl status create-vf.service' to check VF creation service status
+💡 Tip: Monitor logs with 'dmesg | grep -i mellanox' for hardware messages
+sh-5.2$
+
+
+======================================
+sh-5.2$ sudo ./create-vf.service
+sudo: ./create-vf.service: command not found
+sh-5.2$ ls
+LICENSE		   create-virtual-function.sh  install-cx7-firmware.sh	manual-steps-and-lab-testing.md  test-all-scripts.sh
+README.md	   example-lab-execution.txt   install-mft.sh		mlx-nic-health-check.sh		 update-cx7-firmware-mlxup.sh
+create-vf.service  firmware-config.json        install-vf-service.sh	quick-test.sh			 update-cx7-firmware.sh
+sh-5.2$ sudo ./install-vf-service.sh
+2025-08-25 04:23:14 - Installing Mellanox VF Creation Service
+2025-08-25 04:23:14 - Copying VF creation script to /usr/local/bin/create-virtual-function.sh
+2025-08-25 04:23:14 - Installing systemd service file to /etc/systemd/system/create-vf.service
+2025-08-25 04:23:14 - Reloading systemd daemon
+2025-08-25 04:23:14 - Enabling create-vf service
+Created symlink /etc/systemd/system/multi-user.target.wants/create-vf.service → /etc/systemd/system/create-vf.service.
+2025-08-25 04:23:15 - Service installation completed
+2025-08-25 04:23:15 - Service status:
+○ create-vf.service - Mellanox ConnectX-7 Virtual Function Creation Service
+     Loaded: loaded (/etc/systemd/system/create-vf.service; enabled; preset: disabled)
+     Active: inactive (dead)
+       Docs: file:///README.md
+2025-08-25 04:23:15 - Installation summary:
+2025-08-25 04:23:15 - ✅ Script installed to: /usr/local/bin/create-virtual-function.sh
+2025-08-25 04:23:15 - ✅ Service file installed to: /etc/systemd/system/create-vf.service
+2025-08-25 04:23:15 - ✅ Service enabled for automatic startup
+
+Service installation completed!
+
+Available commands:
+  Start service:    sudo systemctl start create-vf
+  Stop service:     sudo systemctl stop create-vf
+  Check status:     sudo systemctl status create-vf
+  View logs:        sudo journalctl -u create-vf -f
+  Disable service:  sudo systemctl disable create-vf
+
+The service will automatically run on system boot/reboot.
+Check logs at: /var/log/vf-service-install.log
+sh-5.2$
+
+=========================================
+
+sh-5.2$ sudo systemctl status create-vf.service
+○ create-vf.service - Mellanox ConnectX-7 Virtual Function Creation Service
+     Loaded: loaded (/etc/systemd/system/create-vf.service; enabled; preset: disabled)
+     Active: inactive (dead)
+       Docs: file:///README.md
+
+=========================================
