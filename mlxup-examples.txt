@@ -1,0 +1,158 @@
+# mlxup Summary
+
+mlxup is a Mellanox firmware update utility that is part of the Mellanox Firmware Tools (MFT) package. Here's what it does:
+
+## Primary Functions
+
+1. Firmware Updates: Updates firmware on Mellanox network adapters (ConnectX series cards)
+
+2. Firmware Management:
+   • Lists available firmware versions
+   • Downloads firmware images
+   • Verifies firmware integrity
+   • Manages firmware rollback capabilities
+
+3. Device Discovery: Automatically detects Mellanox devices in the system
+
+4. Compatibility Checking: Ensures firmware compatibility with hardware and driver versions
+
+## Typical Usage Context
+
+Based on your DPDK setup context, mlxup would be used to:
+
+• **Update ConnectX-7 firmware** on your bare metal nodes
+• **Ensure optimal performance** for DPDK applications
+• **Enable specific features** like SR-IOV with higher VF counts
+• **Fix firmware bugs** that might affect network performance
+
+## Common Commands
+
+bash
+# List devices and current firmware
+mlxup -q
+
+# Update firmware to latest version
+mlxup -d <device_id> -i <firmware_image>
+
+# Query available firmware versions
+mlxup -d <device_id> --query
+
+## help
+sh-5.2$ mlxup --help
+NAME
+    mlxup
+
+SYNOPSIS
+    mlxup
+        [-d|--dev DeviceName] [-h|--help] [-v|--version] [--query] [--query-format Format]
+        [-u|--update] [-i|--image-file FileName] [-D|--image-dir DirectoryName] [-f|--force]
+        [--no_fw_ctrl] [-y|--yes] [--no] [--clear-semaphore] [--exe-rel-path]
+        [-l|--list-content] [--archive-names] [--nofs] [--log] [-L|--log-file LogFileName]
+        [--no-progress] [-o|--outfile OutputFileName] [--online] [--online-query-psid PSIDs]
+        [--key key] [--download DirectoryName] [--download-default] [--get-download-opt OPT]
+        [--download-device Device] [--download-os OS] [--download-type Type]
+        [--ssl-certificate Certificate]
+
+DESCRIPTION
+        Mellanox Firmware Manager
+
+OPTIONS
+    mlxup
+        -d|--dev DeviceName                          : Perform operation for specified mst
+                                                       device(s). Run 'mst status' command to list
+                                                       the available devices. Multiple devices can
+                                                       be specified delimited by semicolons. A
+                                                       device list containing semicolons must be
+                                                       quoted.
+        -h|--help                                    : Show this message and exit
+        -v|--version                                 : Show the executable version and exit
+        --query                                      : Query device(s) info
+        --query-format Format                        : (Query | Online query) output format, XML |
+                                                       Text - default Text
+        -u|--update                                  : Update firmware image(s) on the device(s)
+        -i|--image-file FileName                     : Specified image file to use
+        -D|--image-dir DirectoryName                 : Specified directory instead of default to
+                                                       locate image files
+        -f|--force                                   : Force image update
+        --no_fw_ctrl                                 : Don't use FW Ctrl update
+        -y|--yes                                     : Answer is yes in prompts
+        --no                                         : Answer is no in prompts
+        --clear-semaphore                            : Force clear the flash semaphore on the
+                                                       device, No command is allowed when this flag
+                                                       is used. NOTE: May result in system
+                                                       instability or flash corruption if the
+                                                       device or another application is currently
+                                                       using the flash. Exercise caution.
+        --exe-rel-path                               : Use paths relative to the location of the
+                                                       executable
+        -l|--list-content                            : List file/Directory content, used with
+                                                       --image-dir and --image-file flags
+        --archive-names                              : Display archive names in listing
+        --nofs                                       : Burn image in a non failsafe manner
+        --log                                        : Create log file
+        -L|--log-file LogFileName                    : Use specified log file
+        --no-progress                                : Do not show progress
+        -o|--outfile OutputFileName                  : Write to specified output file
+        --online                                     : Fetch required FW images online from Mellanox
+                                                       server
+        --online-query-psid PSIDs                    : Query FW info, PSID(s) are comma separated
+        --key key                                    : Key for custom download/update
+        --download DirectoryName                     : Download files from server to a specified
+                                                       directory
+        --download-default                           : Use Default values for download
+        --get-download-opt OPT                       : Get download options for OS or Device
+                                                       Options are: OS, Device
+        --download-device Device                     : Use '--get-download-opt Device' option to
+                                                       view available devices for device specific
+                                                       downloads
+        --download-os OS                             : Only for self_extractor download: Use
+                                                       '--get-download-opt OS' option to view
+                                                       available OS for sfx download
+        --download-type Type                         : MFA | self_extractor - default All
+        --ssl-certificate Certificate                : SSL certificate For secure connection
+
+## Examples:
+
+1. Query specific device or all devices (if no device were supplied)
+>> mlxup [-d <device>] [--query]
+2. Burn device with specific image / MFA / images directory
+>> mlxup -d <device> [-i <image file/MFA file> | -D <images dir>]
+3. Update the card's firmware
+>> mlxup -u
+4. Update the card's firmware from latest version on the web
+>> mlxup --online -u
+5. Download latest FW package from the web
+>> mlxup --download-default --download-os Linux_x64 --download-type self_extractor
+
+sh-5.2$ mlxup -l | grep MT_0000000834
+MCX755106AS-HEA_Ax        MT_0000000834      FW 28.43.1014                --             NVIDIA ConnectX-7 HHHL Adapter Card; 200GbE (default mode) / NDR200 IB; Dual-port QSFP112; PCIe 5.0 x16 with x...
+sh-5.2$
+
+sh-5.2$ mlxup --download-default --download-os Linux_x64 --download-type self_extractor
+
+------ Files To Be Downloaded ------
+
+
+All :
+-----
+
+<Files>:
+0 - linux_x64/mlxup
+
+<Release Notes>:
+For more details, please refer to the following FW release notes:
+    1- ConnectX3 (2.42.5000):    http://www.mellanox.com/pdf/firmware/ConnectX3-FW-2_42_5000-release_notes.pdf
+    2- ConnectX3Pro (2.42.5000): http://www.mellanox.com/pdf/firmware/ConnectX3Pro-FW-2_42_5000-release_notes.pdf
+    3- Connect-IB (10.16.1200):  http://www.mellanox.com/pdf/firmware/ConnectIB-FW-10_16_1200-release_notes.pdf
+    4- ConnectX4 (12.28.2006):   http://docs.mellanox.com/display/ConnectX4Firmwarev12282006
+    5- ConnectX4Lx (14.32.1010): http://docs.mellanox.com/display/ConnectX4LxFirmwarev14321010
+    6- ConnectX5 (16.35.4030):   http://docs.mellanox.com/display/ConnectX5Firmwarev16354030
+    7- ConnectX6 (20.43.1014):   http://docs.mellanox.com/display/ConnectX6Firmwarev20431014
+    8- ConnectX6Dx (22.43.1014):   http://docs.mellanox.com/display/ConnectX6DxFirmwarev22431014
+    9- ConnectX6Lx (26.43.1014):   http://docs.mellanox.com/display/ConnectX6LxFirmwarev26431014
+    10- BlueField2 (24.43.1014):   http://docs.mellanox.com/display/BlueField2Firmwarev24431014
+    11- ConnectX7 (28.43.1014):   http://docs.mellanox.com/display/ConnectX7Firmwarev28431014
+    12- BlueField3 (32.43.1014):   http://docs.mellanox.com/display/BlueField3Firmwarev32431014
+
+
+Perform Download? [y/N]:
