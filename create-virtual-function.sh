@@ -158,9 +158,9 @@ for interface in "${INTERFACE_ARRAY[@]}"; do
     
     # Always reset to 0 first, then set to desired number
     log "Step 1: Resetting VFs to 0 for $interface..."
-    if echo 0 > "/sys/class/net/$interface/device/sriov_numvfs" 2>/dev/null; then
+    if echo 0 | tee "/sys/class/net/$interface/device/sriov_numvfs" >/dev/null 2>&1; then
         log "✅ Successfully reset VFs to 0 for $interface"
-        sleep 3  # Give more time for reset
+        sleep 10  # Give more time for reset
         
         # Verify reset
         RESET_VFS=$(cat "/sys/class/net/$interface/device/sriov_numvfs" 2>/dev/null || echo "unknown")
@@ -168,11 +168,11 @@ for interface in "${INTERFACE_ARRAY[@]}"; do
         
         # Step 2: Set to desired number
         log "Step 2: Setting VFs to $VFS_TO_CREATE for $interface..."
-        if echo "$VFS_TO_CREATE" > "/sys/class/net/$interface/device/sriov_numvfs" 2>/dev/null; then
+        if echo "$VFS_TO_CREATE" | tee "/sys/class/net/$interface/device/sriov_numvfs" >/dev/null 2>&1; then
             log "✅ Successfully set VFs to $VFS_TO_CREATE for $interface"
             
             # Verify creation
-            sleep 3
+            sleep 10
             CREATED_VFS=$(cat "/sys/class/net/$interface/device/sriov_numvfs" 2>/dev/null || echo "0")
             ACTUAL_MAX=$(cat "/sys/class/net/$interface/device/sriov_totalvfs" 2>/dev/null || echo "0")
             
