@@ -169,6 +169,8 @@ The following table shows the mapping between PSID (Parameter-Set IDentification
    sudo ./create-virtual-function.sh
    ```
 
+Refer to [example-lab-execution.txt](example-lab-execution.txt) file for successful execution in the lab with a real hardware.
+
 ## Testing Framework
 
 ### 🧪 Built-in Test Suites
