@@ -127,6 +127,10 @@ The following table shows the mapping between PSID (Parameter-Set IDentification
    ```
 
 5. **Configure VFs**: Set up Virtual Functions as needed
+   ```bash
+   sudo ./create-virtual-function.sh           # Configure hardware VF limits and create VFs
+   # Note: Reboot may be required if hardware VF limits are changed
+   ```
 
 ## Testing Framework
 
@@ -478,42 +482,75 @@ sudo flint -d /dev/mst/mt4129_pciconf1 -i fw-ConnectX7-rel-*.bin burn
 
 ## SR-IOV Configuration
 
-### Configure Virtual Functions
+### Automated VF Configuration Script
 
-Set the number of Virtual Functions per port (maximum 127):
+The `create-virtual-function.sh` script provides comprehensive Virtual Function management with both hardware and runtime configuration:
+
+```bash
+# Run the automated VF configuration script
+sudo ./create-virtual-function.sh
+```
+
+**What the script does:**
+
+1. **Hardware VF Limit Configuration** (Persistent):
+   - Uses `mlxconfig` to set `NUM_OF_VFS=127` for all Mellanox devices
+   - Configures hardware limits that survive reboots
+   - Only targets physical functions (.0/.1) to avoid VF sub-devices
+
+2. **Runtime VF Creation** (Immediate):
+   - Auto-detects ConnectX-7 network interfaces
+   - Resets existing VFs to 0 first (required for changes)
+   - Creates up to 127 VFs per interface (based on hardware limits)
+   - Uses proper `tee` commands for sysfs file writes with sudo
+
+**Key Features:**
+- **Two-step process**: Hardware configuration + Runtime creation
+- **Automatic device detection**: Finds all ConnectX-7 interfaces
+- **Proper privilege handling**: Works with `sudo` without requiring root shell
+- **Enhanced stability**: 10-second wait times for VF state transitions
+- **Comprehensive logging**: Step-by-step process tracking
+- **Reboot detection**: Warns when hardware changes require reboot
+
+### Manual VF Configuration (Alternative)
+
+If you prefer manual configuration:
 
 ```bash
 # Check current VF configuration
 mlxconfig -d 0000:05:00.0 query | grep NUM_OF_VFS
 
-# Set VF count (requires reboot)
-sudo mlxconfig -d 0000:05:00.0 set NUM_OF_VFS=127
-sudo mlxconfig -d 0000:05:00.1 set NUM_OF_VFS=127
-sudo mlxconfig -d 0001:05:00.0 set NUM_OF_VFS=127
-sudo mlxconfig -d 0001:05:00.1 set NUM_OF_VFS=127
-
-# Reboot required for changes to take effect
+# Set hardware VF limits (requires reboot)
+sudo mlxconfig -d 0000:05:00.0 set NUM_OF_VFS=127 --yes
+sudo mlxconfig -d 0000:05:00.1 set NUM_OF_VFS=127 --yes
 sudo reboot
+
+# Create runtime VFs after reboot
+echo 0 | sudo tee /sys/class/net/ens1f0np0/device/sriov_numvfs
+echo 127 | sudo tee /sys/class/net/ens1f0np0/device/sriov_numvfs
 ```
 
-### Automated VF Creation
+### Understanding VF Configuration
 
-Create the VF creation script (`create-virtual-function.sh`):
+**Hardware vs Runtime Configuration:**
 
-```bash
-#!/bin/bash
-# Virtual Function Creation Script for ConnectX-7
+| Aspect | Hardware Configuration | Runtime Configuration |
+|--------|----------------------|---------------------|
+| **Tool** | `mlxconfig` | `sysfs` (`/sys/class/net/*/device/sriov_numvfs`) |
+| **Persistence** | Survives reboots | Lost on reboot |
+| **Reboot Required** | Yes | No |
+| **Purpose** | Sets maximum VF limit | Creates actual VFs |
+| **Scope** | Per physical device | Per network interface |
 
-yum install -y lshw jq
+**Process Flow:**
+1. **Hardware Limits** → Set with `mlxconfig` (persistent, requires reboot)
+2. **Runtime Creation** → Create VFs with sysfs (immediate, temporary)
+3. **Verification** → Check both hardware limits and active VFs
 
-# Auto-detect ConnectX-7 interfaces
-INTERFACES=$(lshw -class network -json | jq '.[] | select(.product=="MT2910 Family [ConnectX-7]").logicalname' | tr -d '"')
-NUMBER_VFS=127
-
-for interface in ${INTERFACES[@]}; do
-    echo "Updating Virtual Functions for interface: ${interface}"
-    echo ${NUMBER_VFS} > /sys/class/net/${interface}/device/sriov_numvfs
-done
+**Common Issues:**
+- **"Failed to set VFs to 127"** → Hardware limits not applied yet (reboot required)
+- **"Partial VF configuration"** → Runtime VFs limited by current hardware maximum
+- **Permission denied** → Use `tee` instead of direct redirection with sudo
 ```
 
 ### Systemd Service for Auto VF Creation
@@ -663,11 +700,10 @@ sudo ./mlx-nic-health-check.sh
 sudo ./update-cx7-firmware.sh
 
 # 5. Configure Virtual Functions (if needed)
-sudo mlxconfig -d 0000:05:00.0 set NUM_OF_VFS=127
-sudo reboot
-
-# 6. Create VFs after reboot
 sudo ./create-virtual-function.sh
+
+# Note: If hardware VF limits were changed, reboot is required:
+# sudo reboot
 ```
 
 ### Testing and Validation Workflow
